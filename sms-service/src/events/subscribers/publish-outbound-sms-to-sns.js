@@ -8,11 +8,11 @@ const topicArn = `arn:aws:sns:${region}:${accountId}:smsSent`;
 
 const sns = new SNS();
 
-module.exports = sms =>
+module.exports = outboundSms =>
   sns.publish(
     {
       TopicArn: topicArn,
-      Message: JSON.stringify({ sms })
+      Message: JSON.stringify(outboundSms)
     },
     err => {
       if (err) {
