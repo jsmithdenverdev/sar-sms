@@ -1,0 +1,16 @@
+{
+  "name": "send-sms",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^1.17.0",
+    "serverless-webpack": "^5.2.0",
+    "webpack": "^4.30.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.441.0",
+    "twilio": "^3.30.1"
+  }
+}
