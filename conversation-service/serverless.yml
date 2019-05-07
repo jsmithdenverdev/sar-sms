@@ -1,0 +1,36 @@
+service: conversation-service # NOTE: update this with your service name
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ${opt:region, 'us-west-2'} # Overwrite the default region used. Default is us-east-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Resource: "*"
+      Action:
+        - "sns:*"
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: yarn
+
+package:
+  individually: true
+
+functions:
+  createConversation:
+    handler: src/handlers/create-conversation.handle
+  listConversations:
+    handler: src/handlers/list-conversations.handle
+  createMessage:
+    handler: src/handlers/create-message.handle
+    events:
+      - sns: smsSent
+      - sns: smsRecieved
+  listMessages:
+    handler: src/handlers/list-messages.handle
