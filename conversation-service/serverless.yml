@@ -7,11 +7,24 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: ${opt:region, 'us-west-2'} # Overwrite the default region used. Default is us-east-1
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    AWS_ACCOUNT_ID: ${ssm:accountId}
+    REGION: ${ssm:region}
   iamRoleStatements:
     - Effect: "Allow"
       Resource: "*"
       Action:
         - "sns:*"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 custom:
   webpack:
@@ -23,14 +36,68 @@ package:
   individually: true
 
 functions:
-  createConversation:
-    handler: src/handlers/create-conversation.handle
   listConversations:
     handler: src/handlers/list-conversations.handle
+    events:
+      - http:
+          path: conversation
+          method: get
+  createConversation:
+    handler: src/handlers/create-conversation.handle
+    events:
+      - http:
+          path: conversation/{phone}
+          method: post
+          request:
+            parameters:
+              paths:
+                phone: true
+  readConversation:
+    handler: src/handlers/read-conversation.handle
+    events:
+      - http:
+          path: conversation/{phone}
+          method: get
+          request:
+            parameters:
+              paths:
+                phone: true
+  deleteConversation:
+    handler: src/handlers/delete-conversation.handle
+    events:
+      - http:
+          path: conversation/{phone}
+          method: delete
+          request:
+            parameters:
+              paths:
+                phone: true
   createMessage:
     handler: src/handlers/create-message.handle
     events:
-      - sns: smsSent
-      - sns: smsRecieved
-  listMessages:
-    handler: src/handlers/list-messages.handle
+      - http:
+          path: conversation/{phone}/messages
+          method: post
+          request:
+            parameters:
+              paths:
+                phone: true
+
+resources:
+  Resources:
+    ConversationDynamoTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
