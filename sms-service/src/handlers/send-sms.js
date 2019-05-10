@@ -1,27 +1,20 @@
 const { events, emitter, wireEvents } = require("../events");
-const sendSms = require("../events/subscribers/send-sms");
-const publishOutboundSmsToSns = require("../events/subscribers/publish-outbound-sms-to-sns");
-const handleError = require("../events/subscribers/handle-error");
-const handleSuccess = require("../events/subscribers/handle-success");
+const onSendSms = require("../events/handlers/sms/onSendSms");
+const onSmsSent = require("../events/handlers/sms/onSmsSent");
+const onError = require("../events/handlers/error/onError");
 
-module.exports.handle = (event, context, callback) => {
-  const { body, pathParameters } = event;
-  const { message } = JSON.parse(body);
-  const { phone } = pathParameters;
+module.exports.handle = (event, _context, callback) => {
+  const { message, recipient } = JSON.parse(event.Records[0].Sns.Message);
 
-  const successHandler = handleSuccess(callback);
-  const errorHandler = handleError(callback);
-
-  // This wires the events to their subscriptions
+  // This wires the events to their handlers
   wireEvents({
-    [events.SMS_REQUEST_RECIEVED]: sendSms,
-    [events.SMS_SENT]: publishOutboundSmsToSns,
-    [events.ERROR]: errorHandler,
-    [events.PROCESSING_COMPLETED]: successHandler
+    [events.SEND_SMS]: onSendSms,
+    [events.SMS_SENT]: onSmsSent,
+    [events.ERROR]: onError(callback)
   });
 
-  emitter.emit(events.SMS_REQUEST_RECIEVED, {
-    to: phone,
-    body: message
+  emitter.emit(events.SEND_SMS, {
+    recipient,
+    message
   });
 };

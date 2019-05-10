@@ -1,6 +1,6 @@
 const twilio = require("twilio");
-const emitter = require("../emitter");
-const { ERROR, SMS_SENT, SMS_REQUEST_RECIEVED } = require("../events");
+const emitter = require("../../emitter");
+const { ERROR, SMS_SENT } = require("../../events");
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_ACCOUNT_KEY;
@@ -8,11 +8,11 @@ const from = process.env.TWILIO_PHONE_NUMBER;
 
 const twilioClient = new twilio(accountSid, authToken);
 
-module.exports = ({ to, body }) => {
+module.exports = ({ recipient, message }) => {
   const payload = {
-    to,
+    to: recipient,
     from,
-    body
+    body: message
   };
 
   twilioClient.messages
@@ -22,9 +22,7 @@ module.exports = ({ to, body }) => {
     })
     .catch(e => {
       emitter.emit(ERROR, {
-        event: SMS_REQUEST_RECIEVED,
-        error: e,
-        originalPayload: { to, body }
+        error: e
       });
     });
 };
