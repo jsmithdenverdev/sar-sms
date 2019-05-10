@@ -10,19 +10,19 @@ module.exports = callback => async ({ recipient, message }) => {
 
   // On message created publish it to SNS to be handled
   // by the SMS service.
-  // sns.publish(
-  //   {
-  //     TopicArn: topicArn,
-  //     Message: JSON.stringify({ recipient, message })
-  //   },
-  //   err => {
-  //     if (err) {
-  //       emitter.emit(events.ERROR, {
-  //         error: err
-  //       });
-  //     }
-  //   }
-  // );
+  sns.publish(
+    {
+      TopicArn: topicArn,
+      Message: JSON.stringify({ recipient, message })
+    },
+    err => {
+      if (err) {
+        emitter.emit(events.ERROR, {
+          error: err
+        });
+      }
+    }
+  );
 
   // Call the AWS callback to return a response to the user
   callback(null, {
