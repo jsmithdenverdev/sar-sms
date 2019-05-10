@@ -32,13 +32,7 @@ functions:
       AWS_ACCOUNT_ID: ${ssm:accountId}
       REGION: ${ssm:region}
     events:
-      - http:
-          path: sms/{phone}
-          method: post
-          request:
-            parameters:
-              paths:
-                phone: true
+      - sns: sendSms
 
   twilioCallback:
     handler: src/handlers/twilio-callback.handle
