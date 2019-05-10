@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.441.0"
+    "aws-sdk": "^2.441.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "prettier": "^1.17.0",
