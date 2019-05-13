@@ -111,4 +111,8 @@ function DynamoDb({ region, table }) {
   };
 }
 
-module.exports = DynamoDb;
+// Exporting a singleton DynamoDb
+module.exports = DynamoDb({
+  table: process.env.DYNAMODB_TABLE,
+  region: process.env.REGION
+});

@@ -14,16 +14,12 @@ module.exports = async ({ recipient }) => {
       resolve();
     });
 
-    const client = DynamoDb({
-      table: process.env.DYNAMODB_TABLE,
-      region: process.env.REGION
-    });
-
-    const createdConversation = await client.create(
+    const createdConversation = await DynamoDb.create(
       // Using the recipient phone number as the primary key (ie +1-123-456-7890 => { id: 1234567890 })
       recipient.slice(1),
       {
-        recipient
+        recipient,
+        messages: []
       }
     );
 

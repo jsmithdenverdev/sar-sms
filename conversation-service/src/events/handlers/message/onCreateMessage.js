@@ -13,13 +13,8 @@ module.exports = async ({ recipient, message }) => {
       resolve();
     });
 
-    const client = DynamoDb({
-      table: process.env.DYNAMODB_TABLE,
-      region: process.env.REGION
-    });
-
     const id = recipient.slice(1);
-    const conversation = await client.read(id);
+    const conversation = await DynamoDb.read(id);
 
     if (!conversation) {
       emitter.emit(events.ERROR, {
@@ -31,7 +26,7 @@ module.exports = async ({ recipient, message }) => {
 
     const existingMessages = conversation.messages || [];
 
-    await client.update(
+    await DynamoDb.update(
       // Using the recipient phone number as the primary key (ie +1-123-456-7890 => { id: 1234567890 })
       id,
       "set messages = :m",

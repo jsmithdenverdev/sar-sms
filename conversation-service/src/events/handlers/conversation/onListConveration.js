@@ -4,13 +4,8 @@ const DynamoDb = require('../../../lib/DynamoDb');
 
 module.exports = callback => async () => {
   try {
-    const client = DynamoDb({
-      table: process.env.DYNAMODB_TABLE,
-      region: process.env.REGION
-    });
-
     // Get all conversations
-    const conversations = await client.list();
+    const conversations = await DynamoDb.list();
 
     callback(null, {
       statusCode: 200,

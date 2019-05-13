@@ -14,12 +14,7 @@ module.exports = async ({ recipient }) => {
       resolve();
     });
 
-    const client = DynamoDb({
-      table: process.env.DYNAMODB_TABLE,
-      region: process.env.REGION
-    });
-
-    const deletedConversation = await client.remove(
+    const deletedConversation = await DynamoDb.remove(
       // Using the recipient phone number as the primary key (ie +1-123-456-7890 => { id: 1234567890 })
       recipient.slice(1)
     );
