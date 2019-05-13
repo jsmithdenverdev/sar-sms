@@ -1,0 +1,13 @@
+const PENDING = "PENDING";
+const DELIVERED = "DELIVERED";
+const FAILED = "FAILED";
+
+const MESSAGE_STATUSES = {
+  SENT: DELIVERED,
+  PENDING,
+  FAILED
+};
+
+module.exports = {
+  MESSAGE_STATUSES
+};
