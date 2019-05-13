@@ -6,7 +6,7 @@ const onError = require("../events/handlers/error/onError");
 module.exports.handle = (event, _context, callback) => {
   const { body, pathParameters } = event;
   const { phone } = pathParameters;
-  const { message } = body;
+  const { message } = JSON.parse(body);
 
   wireEvents({
     [events.CREATE_MESSAGE]: onCreateMessage,
