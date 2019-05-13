@@ -2,6 +2,7 @@ service: conversation-service # NOTE: update this with your service name
 
 plugins:
   - serverless-webpack
+  - serverless-offline
 
 provider:
   name: aws
