@@ -102,6 +102,11 @@ function DynamoDb({ region, table }) {
       });
     });
 
+  const query = (expression, attributes) => 
+    new Promise((resolve, reject) => {
+
+    })
+
   return {
     create,
     list,

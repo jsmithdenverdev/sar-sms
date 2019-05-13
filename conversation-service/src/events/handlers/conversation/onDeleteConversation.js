@@ -2,24 +2,27 @@ const emitter = require("../../emitter");
 const events = require("../../events");
 const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = async ({ recipient }) => {
+module.exports = async payload => {
+  const { conversationId } = payload;
+
   try {
     // Validate the conversation (TODO: break this into its own function)
     await new Promise((resolve, reject) => {
-      if (!recipient) {
-        reject("A conversation must have a recipient!");
+      if (!conversationId) {
+        reject("An ID is required to delete a conversation!");
         return;
       }
 
       resolve();
     });
 
-    const deletedConversation = await DynamoDb.remove(
-      // Using the recipient phone number as the primary key (ie +1-123-456-7890 => { id: 1234567890 })
-      recipient.slice(1)
-    );
+    await DynamoDb.remove(conversationId);
 
-    emitter.emit(events.CONVERSATION_DELETED, deletedConversation);
+    const payload = {
+      conversationId
+    };
+
+    emitter.emit(events.CONVERSATION_DELETED, payload);
   } catch (e) {
     emitter.emit(events.ERROR, {
       error: e

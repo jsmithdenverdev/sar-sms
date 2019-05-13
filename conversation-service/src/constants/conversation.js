@@ -1,13 +1,15 @@
 const PENDING = "PENDING";
 const DELIVERED = "DELIVERED";
 const FAILED = "FAILED";
+const RECIEVED = "RECIEVED";
 
-const MESSAGE_STATUSES = {
+const SMS_STATUSES = {
   SENT: DELIVERED,
   PENDING,
-  FAILED
+  FAILED,
+  RECIEVED
 };
 
 module.exports = {
-  MESSAGE_STATUSES
+  SMS_STATUSES
 };

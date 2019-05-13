@@ -2,10 +2,11 @@ const emitter = require("../../emitter");
 const events = require("../../events");
 const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = callback => async ({ recipient }) => {
+module.exports = callback => async payload => {
+  const { conversationId } = payload;
+
   try {
-    // The recipient phone number is the primary key (ie +1-123-456-7890 => { id: 1234567890 })
-    const conversation = await DynamoDb.read(recipient.slice(1));
+    const conversation = await DynamoDb.read(conversationId);
 
     callback(null, {
       statusCode: 200,

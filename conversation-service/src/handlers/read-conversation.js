@@ -4,13 +4,17 @@ const onError = require("../events/handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
-  const { phone } = pathParameters;
+  const { conversationId } = pathParameters;
 
   wireEvents({
     [events.READ_CONVERSATION]: onReadConversation(callback),
     [events.ERROR]: onError(callback)
   });
 
+  const payload = {
+    conversationId
+  };
+
   // Fire off the event to get things rolling
-  emitter.emit(events.READ_CONVERSATION, { recipient: phone });
+  emitter.emit(events.READ_CONVERSATION, payload);
 };

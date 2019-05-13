@@ -47,42 +47,38 @@ functions:
     handler: src/handlers/create-conversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation
           method: post
-          request:
-            parameters:
-              paths:
-                phone: true
   readConversation:
     handler: src/handlers/read-conversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation/{conversationId}
           method: get
           request:
             parameters:
               paths:
-                phone: true
+                conversationId: true
   deleteConversation:
     handler: src/handlers/delete-conversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation/{conversationId}
           method: delete
           request:
             parameters:
               paths:
-                phone: true
+                conversationId: true
   createMessage:
     handler: src/handlers/create-message.handle
     events:
       - http:
-          path: conversation/{phone}/messages
+          path: conversation/{conversationId}/messages
           method: post
           request:
             parameters:
               paths:
-                phone: true
+                conversationId: true
 
 resources:
   Resources:
