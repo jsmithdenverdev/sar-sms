@@ -31,7 +31,7 @@ module.exports = async ({ recipient, message }) => {
       id,
       "set messages = :m",
       {
-        ":m": [existingMessages, { message }]
+        ":m": [...existingMessages, { message }]
       }
     );
 
