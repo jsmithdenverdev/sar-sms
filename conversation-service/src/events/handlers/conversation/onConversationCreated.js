@@ -1,4 +1,4 @@
-module.exports = callback => conversation => {
+module.exports = callback => ({ conversation }) => {
   callback(null, {
     statusCode: 200,
     body: JSON.stringify(conversation),

@@ -13,5 +13,9 @@ module.exports.handle = (event, _context, callback) => {
     [events.ERROR]: onError(callback)
   });
 
-  emitter.emit(events.DELETE_CONVERSATION, { recipient: phone });
-}
+  const payload = {
+    recipient: phone
+  };
+
+  emitter.emit(events.DELETE_CONVERSATION, payload);
+};

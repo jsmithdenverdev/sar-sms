@@ -1,3 +1,4 @@
+const uuid = require("uuid/v1");
 const emitter = require("../../emitter");
 const events = require("../../events");
 const DynamoDb = require("../../../lib/DynamoDb");
@@ -14,20 +15,16 @@ module.exports = async ({ recipient }) => {
       resolve();
     });
 
-    const client = DynamoDb({
-      table: process.env.DYNAMODB_TABLE,
-      region: process.env.REGION
+    const conversation = await DynamoDb.create(recipient.slice(1), {
+      recipient,
+      sms: [],
+      created: new Date(Date.now()).toISOString(),
+      modified: new Date(Date.now()).toISOString()
     });
 
-    const createdConversation = await client.create(
-      // Using the recipient phone number as the primary key (ie +1-123-456-7890 => { id: 1234567890 })
-      recipient.slice(1),
-      {
-        recipient
-      }
-    );
-
-    emitter.emit(events.CONVERSATION_CREATED, createdConversation);
+    emitter.emit(events.CONVERSATION_CREATED, {
+      conversation
+    });
   } catch (e) {
     emitter.emit(events.ERROR, {
       error: e

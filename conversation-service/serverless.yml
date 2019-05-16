@@ -2,6 +2,7 @@ service: conversation-service # NOTE: update this with your service name
 
 plugins:
   - serverless-webpack
+  - serverless-offline
 
 provider:
   name: aws
@@ -72,16 +73,24 @@ functions:
             parameters:
               paths:
                 phone: true
-  createMessage:
-    handler: src/handlers/create-message.handle
+  createSms:
+    handler: src/handlers/create-sms.handle
     events:
       - http:
-          path: conversation/{phone}/messages
+          path: conversation/{phone}/sms
           method: post
           request:
             parameters:
               paths:
                 phone: true
+  createRecievedSms:
+    handler: src/handlers/create-recieved-sms.handle
+    events:
+      - sns: smsRecieved
+  updateSmsStatus:
+    handler: src/handlers/update-sms-status.handle
+    events:
+      - sns: smsSent
 
 resources:
   Resources:

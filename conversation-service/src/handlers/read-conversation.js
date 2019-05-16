@@ -11,6 +11,10 @@ module.exports.handle = (event, _context, callback) => {
     [events.ERROR]: onError(callback)
   });
 
+  const payload = {
+    recipient: phone
+  };
+
   // Fire off the event to get things rolling
-  emitter.emit(events.READ_CONVERSATION, { recipient: phone });
+  emitter.emit(events.READ_CONVERSATION, payload);
 };
