@@ -4,7 +4,7 @@ const onSmsSent = require("../events/handlers/sms/onSmsSent");
 const onError = require("../events/handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
-  const { message, recipient } = JSON.parse(event.Records[0].Sns.Message);
+  const { sms, recipient } = JSON.parse(event.Records[0].Sns.Message);
 
   // This wires the events to their handlers
   wireEvents({
@@ -14,7 +14,7 @@ module.exports.handle = (event, _context, callback) => {
   });
 
   emitter.emit(events.SEND_SMS, {
-    recipient,
-    message
+    sms,
+    recipient
   });
 };

@@ -2,11 +2,9 @@ const emitter = require("../../emitter");
 const events = require("../../events");
 const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = callback => async payload => {
-  const { conversationId } = payload;
-
+module.exports = callback => async ({ recipient }) => {
   try {
-    const conversation = await DynamoDb.read(conversationId);
+    const conversation = await DynamoDb.read(recipient.slice(1));
 
     callback(null, {
       statusCode: 200,

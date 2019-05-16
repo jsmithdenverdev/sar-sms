@@ -4,7 +4,7 @@ const onError = require("../events/handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
-  const { conversationId } = pathParameters;
+  const { phone } = pathParameters;
 
   wireEvents({
     [events.READ_CONVERSATION]: onReadConversation(callback),
@@ -12,7 +12,7 @@ module.exports.handle = (event, _context, callback) => {
   });
 
   const payload = {
-    conversationId
+    recipient: phone
   };
 
   // Fire off the event to get things rolling

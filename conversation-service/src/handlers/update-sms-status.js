@@ -4,7 +4,7 @@ const onError = require("../events/handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const message = JSON.parse(event.Records[0].Sns.Message);
-  const { conversationId, messageId } = message;
+  const { sms, recipient } = message;
 
   wireEvents({
     [events.UPDATE_SMS_STATUS]: onUpdateSmsStatus,
@@ -12,5 +12,5 @@ module.exports.handle = (event, _context, callback) => {
   });
 
   // Fire off the event to get things rolling
-  emitter.emit(events.UPDATE_SMS_STATUS, { conversationId, messageId });
+  emitter.emit(events.UPDATE_SMS_STATUS, { sms, recipient });
 };

@@ -2,27 +2,23 @@ const emitter = require("../../emitter");
 const events = require("../../events");
 const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = async payload => {
-  const { conversationId } = payload;
-
+module.exports = async ({ recipient }) => {
   try {
     // Validate the conversation (TODO: break this into its own function)
     await new Promise((resolve, reject) => {
-      if (!conversationId) {
-        reject("An ID is required to delete a conversation!");
+      if (!recipient) {
+        reject("An Phone Number is required to delete a conversation!");
         return;
       }
 
       resolve();
     });
 
-    await DynamoDb.remove(conversationId);
+    await DynamoDb.remove(recipient.slice(1));
 
-    const payload = {
-      conversationId
-    };
-
-    emitter.emit(events.CONVERSATION_DELETED, payload);
+    emitter.emit(events.CONVERSATION_DELETED, {
+      recipient: recipient.slice(1)
+    });
   } catch (e) {
     emitter.emit(events.ERROR, {
       error: e

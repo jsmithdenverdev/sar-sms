@@ -5,7 +5,7 @@ const onError = require("../events/handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
-  const { conversationId } = pathParameters;
+  const { phone } = pathParameters;
   const { body } = JSON.parse(event.body);
 
   wireEvents({
@@ -16,7 +16,7 @@ module.exports.handle = (event, _context, callback) => {
 
   // TODO: Allow sending media
   const payload = {
-    conversationId,
+    recipient: phone,
     body
   };
 

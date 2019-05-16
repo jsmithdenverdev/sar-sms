@@ -2,8 +2,7 @@ const emitter = require("../../emitter");
 const events = require("../../events");
 const SNS = require("aws-sdk/clients/sns");
 
-module.exports = callback => async payload => {
-  const { sms, conversationId } = payload;
+module.exports = callback => async ({ sms, recipient }) => {
   const region = process.env.REGION;
   const accountId = process.env.AWS_ACCOUNT_ID;
   const topicArn = `arn:aws:sns:${region}:${accountId}:sendSms`;
@@ -13,7 +12,7 @@ module.exports = callback => async payload => {
   sns.publish(
     {
       TopicArn: topicArn,
-      Message: JSON.stringify({ sms, conversationId })
+      Message: JSON.stringify({ sms, recipient })
     },
     err => {
       if (err) {

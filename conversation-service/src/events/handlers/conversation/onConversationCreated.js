@@ -1,7 +1,7 @@
-module.exports = callback => payload => {
+module.exports = callback => ({ conversation }) => {
   callback(null, {
     statusCode: 200,
-    body: JSON.stringify(payload),
+    body: JSON.stringify(conversation),
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json"

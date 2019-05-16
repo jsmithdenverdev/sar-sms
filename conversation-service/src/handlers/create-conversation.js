@@ -4,8 +4,8 @@ const onConversationCreated = require("../events/handlers/conversation/onConvers
 const onError = require("../events/handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
-  const { body } = event;
-  const { phone } = JSON.parse(body);
+  const { pathParameters } = event;
+  const { phone } = pathParameters;
 
   wireEvents({
     [events.CREATE_CONVERSATION]: onCreateConversation,
