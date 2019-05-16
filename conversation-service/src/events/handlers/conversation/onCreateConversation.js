@@ -1,11 +1,9 @@
-const uuid = require('uuid/v1');
+const uuid = require("uuid/v1");
 const emitter = require("../../emitter");
 const events = require("../../events");
 const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = async payload => {
-  const { recipient } = payload;
-
+module.exports = async ({ recipient }) => {
   try {
     // Validate the conversation (TODO: break this into its own function)
     await new Promise((resolve, reject) => {
@@ -17,15 +15,16 @@ module.exports = async payload => {
       resolve();
     });
 
-    const payload = await DynamoDb.create(
-      uuid(),
-      {
-        recipient,
-        sms: []
-      }
-    );
+    const conversation = await DynamoDb.create(recipient.slice(1), {
+      recipient,
+      sms: [],
+      created: new Date(Date.now()).toISOString(),
+      modified: new Date(Date.now()).toISOString()
+    });
 
-    emitter.emit(events.CONVERSATION_CREATED, payload);
+    emitter.emit(events.CONVERSATION_CREATED, {
+      conversation
+    });
   } catch (e) {
     emitter.emit(events.ERROR, {
       error: e
