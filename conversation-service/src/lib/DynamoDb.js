@@ -1,45 +1,33 @@
 const aws = require("aws-sdk");
 const uuid = require("uuid/v1");
 
-function DynamoDb({ region, table }) {
-  const { DocumentClient } = aws.DynamoDB;
+const region = process.env.REGION;
+const table = process.env.DYNAMODB_TABLE;
+const { DocumentClient } = aws.DynamoDB;
 
-  // Set the region for AWS
-  aws.config.update({ region });
+// Set the region for AWS
+aws.config.update({ region });
 
-  const client = new DocumentClient({ apiVersion: "2012-08-10" });
+const client = new DocumentClient({ apiVersion: "2012-08-10" });
 
-  const create = (key, item) =>
+function DynamoDb({ client, table }) {
+  const create = (id, item) =>
     new Promise((resolve, reject) => {
       const params = {
         TableName: table,
         Item: {
-          id: key ? key : uuid(),
+          id,
           ...item
         }
       };
+
       client.put(params, (err, data) => {
         if (err) {
           reject(err);
-          return;
+        } else {
+          // Data comes back empty so we return the raw item 
+          resolve(params.Item);
         }
-
-        resolve(data);
-      });
-    });
-
-  const list = () =>
-    new Promise((resolve, reject) => {
-      const params = {
-        TableName: table
-      };
-      client.scan(params, (err, data) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(data);
       });
     });
 
@@ -55,10 +43,30 @@ function DynamoDb({ region, table }) {
       client.get(params, (err, data) => {
         if (err) {
           reject(err);
-          return;
+        } else {
+          resolve(data.Item);
         }
+      });
+    });
 
-        resolve(data);
+  const update = (id, expression, attributes) =>
+    new Promise((resolve, reject) => {
+      const params = {
+        TableName: table,
+        Key: {
+          id
+        },
+        UpdateExpression: expression,
+        ExpressionAttributeValues: attributes,
+        ReturnValues: "UPDATED_NEW"
+      };
+
+      client.update(params, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data.Item);
+        }
       });
     });
 
@@ -74,50 +82,38 @@ function DynamoDb({ region, table }) {
       client.delete(params, (err, data) => {
         if (err) {
           reject(err);
-          return;
+        } else {
+          resolve(data.Item);
         }
-
-        resolve(data);
       });
     });
 
-  const update = (id, expression, attributes) =>
+  const list = () =>
     new Promise((resolve, reject) => {
       const params = {
-        TableName: table,
-        Key: {
-          id
-        },
-        UpdateExpression: expression,
-        ExpressionAttributeValues: attributes
+        TableName: table
       };
 
-      client.update(params, (err, data) => {
+      client.scan(params, (err, data) => {
         if (err) {
           reject(err);
-          return;
+        } else {
+          resolve(data.Items);
         }
-
-        resolve(data);
       });
     });
-
-  const query = (expression, attributes) => 
-    new Promise((resolve, reject) => {
-
-    })
 
   return {
     create,
-    list,
     read,
+    update,
     remove,
-    update
+    list
   };
 }
 
 // Exporting a singleton DynamoDb
 module.exports = DynamoDb({
-  table: process.env.DYNAMODB_TABLE,
-  region: process.env.REGION
+  client,
+  table
 });
