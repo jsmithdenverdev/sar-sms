@@ -47,38 +47,50 @@ functions:
     handler: src/handlers/create-conversation.handle
     events:
       - http:
-          path: conversation
+          path: conversation/{phone}
           method: post
+          request:
+            parameters:
+              paths:
+                phone: true
   readConversation:
     handler: src/handlers/read-conversation.handle
     events:
       - http:
-          path: conversation/{conversationId}
+          path: conversation/{phone}
           method: get
           request:
             parameters:
               paths:
-                conversationId: true
+                phone: true
   deleteConversation:
     handler: src/handlers/delete-conversation.handle
     events:
       - http:
-          path: conversation/{conversationId}
+          path: conversation/{phone}
           method: delete
           request:
             parameters:
               paths:
-                conversationId: true
-  createMessage:
-    handler: src/handlers/create-message.handle
+                phone: true
+  createSms:
+    handler: src/handlers/create-sms.handle
     events:
       - http:
-          path: conversation/{conversationId}/messages
+          path: conversation/{phone}/sms
           method: post
           request:
             parameters:
               paths:
-                conversationId: true
+                phone: true
+  createRecievedSms:
+    handler: src/handlers/create-recieved-sms.handle
+    events:
+      - sns: smsRecieved
+  updateSmsStatus:
+    handler: src/handlers/update-sms-status.handle
+    events:
+      - sns: smsSent
 
 resources:
   Resources:
