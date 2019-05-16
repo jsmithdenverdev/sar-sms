@@ -4,43 +4,36 @@ const { ERROR, SMS_CREATED } = require("../../events");
 const { SMS_STATUSES } = require("../../../constants/conversation");
 const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = async payload => {
-  const { conversationId, body } = payload;
-
+module.exports = async ({ recipient, body, recieved }) => {
   try {
-    await new Promise((resolve, reject) => {
-      if (!conversationId) {
-        reject("A conversation ID is required to send a message!");
-        return;
-      }
-
-      resolve();
-    });
-
-    const conversation = await DynamoDb.read(conversationId);
+    const conversation = await DynamoDb.read(recipient.slice(1));
 
     if (!conversation) {
       emitter.emit(ERROR, {
-        error: "A conversation for this ID was not found!"
+        error: "A conversation for this phone number was not found!"
       });
 
       return;
     }
 
-    const existingSms = conversation.sms || [];
+    const existingSms = conversation.sms;
+
     const newSms = {
       id: uuid(),
       body,
-      recipient: conversation.recipient,
-      // Once we confirm delivery from Twilio this will be updated to SMS_STATUSES.DELIVERED
-      status: SMS_STATUSES.PENDING
+      status: recieved ? SMS_STATUSES.RECIEVED : SMS_STATUSES.PENDING,
+      created: new Date(Date.now()).toISOString(),
+      modified: new Date(Date.now()).toISOString()
     };
 
-    await DynamoDb.update(conversationId, "set sms = :s", {
-      ":s": [...existingSms, newSms]
+    await DynamoDb.update(recipient.slice(1), "set sms = :s, modified = :m", {
+      ":s": [...existingSms, newSms],
+      ":m": new Date(Date.now()).toISOString()
     });
 
-    emitter.emit(SMS_CREATED, { sms: newSms, conversationId });
+    if (!recieved) {
+      emitter.emit(SMS_CREATED, { sms: newSms, recipient });
+    }
   } catch (e) {
     emitter.emit(ERROR, {
       error: e
