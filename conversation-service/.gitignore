@@ -9,3 +9,5 @@ jspm_packages
 
 # Built files
 .webpack
+
+.dynamodb
