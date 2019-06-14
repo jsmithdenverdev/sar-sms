@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "9fab8aa5-dd27-40f5-9593-a8bfa2458903",
+		"name": "sar-sms",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List Conversations",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/conversation",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"conversation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Conversation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/conversation/{{phone}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"conversation",
+						"{{phone}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read Conversation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/conversation/{{phone}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"conversation",
+						"{{phone}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Conversation",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/conversation/{{phone}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"conversation",
+						"{{phone}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Sms",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"body\": \"ATTENTION. Search and Rescue has been activated and is on the way to your location. If you are not in immediate danger, STAY WHERE YOU ARE. \\r\\n — \\r\\nThis number can be used to send information to the Search and Rescue team.\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/conversation/{{phone}}/sms",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"conversation",
+						"{{phone}}",
+						"sms"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "639eb20a-f52d-4cff-a04e-7ebfb5f0088c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b986e577-e06b-423c-9800-bd0d70332a14",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "0d94d105-75bc-4671-a63e-0b90aa5e8d00",
+			"key": "baseUrl",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "4ef4a996-a9cb-472d-b12c-312fc1ded53d",
+			"key": "phone",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "5e9639dc-63a0-431b-bfc0-1cb84c2bd0cd",
+			"key": "cannedMessage1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "8908932d-3967-4849-a577-e5710a851159",
+			"key": "cannedMessage2",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
