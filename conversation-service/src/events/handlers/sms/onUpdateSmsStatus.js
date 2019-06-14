@@ -1,4 +1,4 @@
-const events = require("../../events");
+const events = require("../../../common/events");
 const emitter = require("../../emitter");
 const { SMS_STATUSES } = require("../../../constants/conversation");
 const DynamoDb = require("../../../lib/DynamoDb");

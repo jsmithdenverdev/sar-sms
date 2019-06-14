@@ -1,5 +1,5 @@
 const emitter = require("../../emitter");
-const events = require("../../events");
+const events = require("../../../common/events");
 const SNS = require("aws-sdk/clients/sns");
 
 module.exports = callback => async ({ sms, recipient }) => {

@@ -1,6 +1,6 @@
 const uuid = require("uuid/v1");
 const emitter = require("../../emitter");
-const { ERROR, SMS_CREATED } = require("../../events");
+const { ERROR, SMS_CREATED } = require("../../../common/events");
 const { SMS_STATUSES } = require("../../../constants/conversation");
 const DynamoDb = require("../../../lib/DynamoDb");
 

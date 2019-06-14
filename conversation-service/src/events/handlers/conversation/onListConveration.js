@@ -1,5 +1,5 @@
 const emitter = require('../../emitter');
-const events = require('../../events');
+const events = require('../../../common/events');
 const DynamoDb = require('../../../lib/DynamoDb');
 
 module.exports = callback => async () => {
