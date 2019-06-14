@@ -76,9 +76,5 @@ Each Lambda exposes a single entry point function named `handle`. `handle` has t
 - Initiate the first event in the pipeline
 
 ### `EventBinding`'s `EventHandler`'s and the `EventManager`
-Javascript's EventEmitter only allows you to register a function as the handler for a given event. 
-However we want to use OOP with our handlers so we can take advantage of modern patterns like IOC. That means that we need an intermediate layer. 
-That is where the `EventHandler` and `EventManager` come into play. 
-The `EventHandler` is an interface that is used to describe an event handler from an OOP perspective. The `EventManager` class will take a collection of `EventBindings` (which represent an event name and its corresponding handler) and bind the handle methods with the event name. Since an `EventHandler` is a class that means we can do things like inject the dependencies that our handle function will need to operate. This allows us to elegantly bridge the gap between OOP practices and Javascripts functional core.
 
-### Samples
+Javascript's EventEmitter only allows you to register a function as the handler for a given event. However we want to use OOP with our handlers so we can take advantage of modern patterns like IOC. That means that we need an intermediate layer. That is where the `EventHandler` and `EventManager` come into play. The `EventHandler` is an interface that is used to describe an event handler from an OOP perspective. The `EventManager` class will take a collection of `EventBindings` (which represent an event name and its corresponding handler) and bind the handle methods with the event name. Since an `EventHandler` is a class that means we can do things like inject the dependencies that our handle function will need to operate. This allows us to elegantly bridge the gap between OOP practices and Javascripts functional core.
