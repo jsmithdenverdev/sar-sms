@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { EventBinding } from "./types";
+import { EventBinding } from "../common/types";
 
 export default class EventManager {
   constructor(private eventEmitter: EventEmitter) {}
