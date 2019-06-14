@@ -6,11 +6,7 @@
     "aws-sdk": "^2.441.0",
     "uuid": "^3.3.2"
   },
-  "scripts": {
-    "build": "tsc",
-    "deploy": "sls deploy",
-    "build:deploy": "npm run build && npm run deploy"
-  },
+  "scripts": {},
   "devDependencies": {
     "prettier": "^1.17.0",
     "serverless-dynamodb-local": "^0.2.37",
