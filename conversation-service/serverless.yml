@@ -1,9 +1,7 @@
-service: conversation-service # NOTE: update this with your service name
+service: conversation-service
 
 plugins:
-  - serverless-webpack
   - serverless-offline
-  - serverless-dynamodb-local
 
 provider:
   name: aws
@@ -28,24 +26,18 @@ provider:
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
-custom:
-  webpack:
-    webpackConfig: ./webpack.config.js
-    includeModules: true
-    packager: yarn
-
 package:
   individually: true
 
 functions:
   listConversations:
-    handler: src/handlers/list-conversations.handle
+    handler: dist/handlers/list-conversations.handle
     events:
       - http:
           path: conversation
           method: get
   createConversation:
-    handler: src/handlers/create-conversation.handle
+    handler: dist/handlers/create-conversation.handle
     events:
       - http:
           path: conversation/{phone}
@@ -55,7 +47,7 @@ functions:
               paths:
                 phone: true
   readConversation:
-    handler: src/handlers/read-conversation.handle
+    handler: dist/handlers/read-conversation.handle
     events:
       - http:
           path: conversation/{phone}
@@ -65,7 +57,7 @@ functions:
               paths:
                 phone: true
   deleteConversation:
-    handler: src/handlers/delete-conversation.handle
+    handler: dist/handlers/delete-conversation.handle
     events:
       - http:
           path: conversation/{phone}
@@ -75,7 +67,7 @@ functions:
               paths:
                 phone: true
   createSms:
-    handler: src/handlers/create-sms.handle
+    handler: dist/handlers/create-sms.handle
     events:
       - http:
           path: conversation/{phone}/sms
@@ -85,11 +77,11 @@ functions:
               paths:
                 phone: true
   createRecievedSms:
-    handler: src/handlers/create-recieved-sms.handle
+    handler: dist/handlers/create-recieved-sms.handle
     events:
       - sns: smsRecieved
   updateSmsStatus:
-    handler: src/handlers/update-sms-status.handle
+    handler: dist/handlers/update-sms-status.handle
     events:
       - sns: smsSent
 
