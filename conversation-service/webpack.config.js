@@ -1,26 +1,25 @@
 const path = require("path");
-const slsw = require("serverless-webpack");
 const nodeExternals = require("webpack-node-externals");
 
 module.exports = {
-  entry: slsw.lib.entries,
+  entry: {
+    createConversation: "./src/handlers/create-conversation.js",
+    createRecievedSms: "./src/handlers/create-recieved-sms.js",
+    createSms: "./src/handlers/create-sms.js",
+    deleteConversation: "./src/handlers/delete-conversation.js",
+    listConversations: "./src/handlers/list-conversations.js",
+    readConversation: "./src/handlers/read-conversation.js",
+    updateSmsStatus: "./src/handlers/update-sms-status.js"
+  },
   resolve: {
-    extensions: [".js", ".json", ".ts", ".tsx"]
+    extensions: [".js", ".json"]
   },
   target: "node",
-  mode: slsw.lib.webpack.isLocal ? "development" : "production",
+  mode: process.env.NODE_ENV,
   externals: [nodeExternals()],
   output: {
     libraryTarget: "commonjs2",
-    path: path.join(__dirname, ".webpack"),
+    path: path.join(__dirname, "dist"),
     filename: "[name].js"
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts(x?)$/,
-        loader: "ts-loader"
-      }
-    ]
   }
 };
