@@ -8,12 +8,9 @@
   },
   "devDependencies": {
     "prettier": "^1.17.0",
-    "serverless-dynamodb-local": "^0.2.37",
     "serverless-offline": "^4.10.0",
-    "serverless-webpack": "^5.2.0",
     "webpack": "^4.30.0",
-    "webpack-node-externals": "^1.7.2",
-    "ts-loader": "^6.0.2",
-    "typescript": "^3.5.1"
+    "webpack-cli": "^3.3.6",
+    "webpack-node-externals": "^1.7.2"
   }
 }
