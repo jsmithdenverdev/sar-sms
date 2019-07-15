@@ -1,11 +1,13 @@
 const events = require("../../events");
-const emitter = require("../../emitter");
 const { SMS_STATUSES } = require("../../../constants/conversation");
-const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = async ({ sms, recipient }) => {
+const onUpdateSmsStatus = ({
+  emitter,
+  readConversation,
+  updateConversation
+}) => async ({ sms, recipient }) => {
   try {
-    const conversation = await DynamoDb.read(recipient.slice(1));
+    const conversation = await readConversation(recipient.slice(1));
 
     if (!conversation) {
       emitter.emit(events.ERROR, {
@@ -17,16 +19,15 @@ module.exports = async ({ sms, recipient }) => {
     const before = conversation.sms.slice(0, index);
     const after = conversation.sms.slice(index + 1, conversation.sms.length);
 
-    const updatedSms = {
+    const updated = {
       ...sms,
       status: SMS_STATUSES.SENT,
       modified: new Date(Date.now()).toISOString()
     };
 
-    const newSmsCollection = [...before, updatedSms, ...after];
-
-    await DynamoDb.update(recipient.slice(1), "set sms = :s", {
-      ":s": newSmsCollection
+    await updateConversation({
+      ...conversation,
+      sms: [...before, updated, ...after]
     });
   } catch (e) {
     emitter.emit(events.ERROR, {
@@ -34,3 +35,5 @@ module.exports = async ({ sms, recipient }) => {
     });
   }
 };
+
+module.exports = onUpdateSmsStatus;

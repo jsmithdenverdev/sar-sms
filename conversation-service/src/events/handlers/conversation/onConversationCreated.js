@@ -1,4 +1,4 @@
-module.exports = callback => ({ conversation }) => {
+const onConversationCreated = ({ callback }) => ({ conversation }) => {
   callback(null, {
     statusCode: 200,
     body: JSON.stringify(conversation),
@@ -8,3 +8,5 @@ module.exports = callback => ({ conversation }) => {
     }
   });
 };
+
+module.exports = onConversationCreated;

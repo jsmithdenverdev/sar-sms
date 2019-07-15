@@ -1,10 +1,10 @@
-const emitter = require("../../emitter");
 const events = require("../../events");
-const DynamoDb = require("../../../lib/DynamoDb");
 
-module.exports = callback => async ({ recipient }) => {
+const onReadConversation = ({ callback, emitter, readConversation }) => async ({
+  recipient
+}) => {
   try {
-    const conversation = await DynamoDb.read(recipient.slice(1));
+    const conversation = await readConversation(recipient.slice(1));
 
     callback(null, {
       statusCode: 200,
@@ -20,3 +20,5 @@ module.exports = callback => async ({ recipient }) => {
     });
   }
 };
+
+module.exports = onReadConversation;

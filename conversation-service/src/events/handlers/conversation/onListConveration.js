@@ -1,11 +1,13 @@
-const emitter = require('../../emitter');
-const events = require('../../events');
-const DynamoDb = require('../../../lib/DynamoDb');
+const events = require("../../events");
 
-module.exports = callback => async () => {
+const onListConversation = ({
+  callback,
+  emitter,
+  listConversations
+}) => async () => {
   try {
     // Get all conversations
-    const conversations = await DynamoDb.list();
+    const conversations = await listConversations();
 
     callback(null, {
       statusCode: 200,
@@ -21,3 +23,5 @@ module.exports = callback => async () => {
     });
   }
 };
+
+module.exports = onListConversation;

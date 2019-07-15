@@ -1,37 +1,31 @@
-const emitter = require("../../emitter");
 const events = require("../../events");
-const SNS = require("aws-sdk/clients/sns");
 
-module.exports = callback => async ({ sms, recipient }) => {
-  const region = process.env.REGION;
-  const accountId = process.env.AWS_ACCOUNT_ID;
-  const topicArn = `arn:aws:sns:${region}:${accountId}:sendSms`;
-  const sns = new SNS();
+const onSmsCreated = ({ callback, publishToQueue, emitter }) => async ({
+  sms,
+  recipient
+}) => {
+  try {
+    const region = process.env.REGION;
+    const accountId = process.env.AWS_ACCOUNT_ID;
+    const topic = `arn:aws:sns:${region}:${accountId}:sendSms`;
 
-  // On message created publish it to SNS to be handled by the SMS service.
-  sns.publish(
-    {
-      TopicArn: topicArn,
-      Message: JSON.stringify({ sms, recipient })
-    },
-    err => {
-      if (err) {
-        emitter.emit(events.ERROR, {
-          error: err
-        });
+    // When a new sms is created it needs to be queued up to be sent
+    await publishToQueue({ topic })(JSON.stringify({ sms, recipient }));
 
-        return;
+    // Call the AWS callback to return a response to the user
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(sms),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
       }
-    }
-  );
-
-  // Call the AWS callback to return a response to the user
-  callback(null, {
-    statusCode: 200,
-    body: JSON.stringify(sms),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json"
-    }
-  });
+    });
+  } catch (e) {
+    emitter.emit(events.ERROR, {
+      error: e
+    });
+  }
 };
+
+module.exports = onSmsCreated;

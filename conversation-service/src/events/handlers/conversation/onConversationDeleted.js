@@ -1,4 +1,4 @@
-module.exports = callback => ({ recipient }) => {
+const onConversationDeleted = ({ callback }) => ({ recipient }) => {
   callback(null, {
     statusCode: 200,
     body: JSON.stringify(recipient),
@@ -8,3 +8,5 @@ module.exports = callback => ({ recipient }) => {
     }
   });
 };
+
+module.exports = onConversationDeleted;
