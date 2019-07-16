@@ -12,10 +12,17 @@ module.exports = {
     updateSmsStatus: "./src/handlers/update-sms-status.js"
   },
   resolve: {
-    extensions: [".js", ".json"]
+    extensions: [".js", ".json"],
+    alias: {
+      "@common": path.resolve(__dirname, "src/common"),
+      "@constants": path.resolve(__dirname, "src/constants"),
+      "@events": path.resolve(__dirname, "src/events"),
+      "@handlers": path.resolve(__dirname, "src/handlers"),
+      "@lib": path.resolve(__dirname, "src/lib")
+    }
   },
   target: "node",
-  mode: process.env.NODE_ENV,
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
   externals: [nodeExternals()],
   output: {
     libraryTarget: "commonjs2",

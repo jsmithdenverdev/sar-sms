@@ -2,15 +2,29 @@
   "name": "conversation-service",
   "version": "0.1.0",
   "license": "MIT",
+  "scripts": {
+    "build": "npx webpack",
+    "test": "jest"
+  },
   "dependencies": {
     "aws-sdk": "^2.441.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "jest": "^24.8.0",
     "prettier": "^1.17.0",
     "serverless-offline": "^4.10.0",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.6",
     "webpack-node-externals": "^1.7.2"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@common(.*)$": "<rootDir>/src/common/$1",
+      "^@constants(.*)$": "<rootDir>/src/constants/$1",
+      "^@events(.*)$": "<rootDir>/src/events/$1",
+      "^@handlers(.*)$": "<rootDir>/src/handlers/$1",
+      "^@lib(.*)$": "<rootDir>/src/lib/$1"
+    }
   }
 }
