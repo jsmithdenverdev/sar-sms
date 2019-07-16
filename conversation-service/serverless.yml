@@ -31,13 +31,13 @@ package:
 
 functions:
   listConversations:
-    handler: dist/handlers/list-conversations.handle
+    handler: dist/listConversations.handle
     events:
       - http:
           path: conversation
           method: get
   createConversation:
-    handler: dist/handlers/create-conversation.handle
+    handler: dist/createConversation.handle
     events:
       - http:
           path: conversation/{phone}
@@ -47,7 +47,7 @@ functions:
               paths:
                 phone: true
   readConversation:
-    handler: dist/handlers/read-conversation.handle
+    handler: dist/readConversation.handle
     events:
       - http:
           path: conversation/{phone}
@@ -57,7 +57,7 @@ functions:
               paths:
                 phone: true
   deleteConversation:
-    handler: dist/handlers/delete-conversation.handle
+    handler: dist/deleteConversation.handle
     events:
       - http:
           path: conversation/{phone}
@@ -67,7 +67,7 @@ functions:
               paths:
                 phone: true
   createSms:
-    handler: dist/handlers/create-sms.handle
+    handler: dist/createSms.handle
     events:
       - http:
           path: conversation/{phone}/sms
@@ -77,11 +77,11 @@ functions:
               paths:
                 phone: true
   createRecievedSms:
-    handler: dist/handlers/create-recieved-sms.handle
+    handler: dist/createRecievedSms.handle
     events:
       - sns: smsRecieved
   updateSmsStatus:
-    handler: dist/handlers/update-sms-status.handle
+    handler: dist/handlers/updateSmsStatus.handle
     events:
       - sns: smsSent
 
