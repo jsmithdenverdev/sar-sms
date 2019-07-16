@@ -1,5 +1,5 @@
-const { ERROR, SMS_CREATED } = require("../../events");
-const { SMS_STATUSES } = require("../../../constants/conversation");
+const { ERROR, SMS_CREATED } = require("@constants/events");
+const { SMS_STATUSES } = require("@constants/conversation");
 
 const onCreateSms = ({
   emitter,

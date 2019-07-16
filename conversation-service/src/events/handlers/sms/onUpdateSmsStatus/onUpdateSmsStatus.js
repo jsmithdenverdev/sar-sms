@@ -1,5 +1,5 @@
-const events = require("../../events");
-const { SMS_STATUSES } = require("../../../constants/conversation");
+const events = require("@constants/events");
+const { SMS_STATUSES } = require("@constants/conversation");
 
 const onUpdateSmsStatus = ({
   emitter,

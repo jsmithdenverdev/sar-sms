@@ -1,18 +1,13 @@
-const events = require("../../events");
+const events = require("@constants/events");
 
 const onCreateConversation = ({ emitter, createConversation }) => async ({
   recipient
 }) => {
   try {
     // Validate the conversation (TODO: break this into its own function)
-    await new Promise((resolve, reject) => {
-      if (!recipient) {
-        reject("A conversation must have a recipient!");
-        return;
-      }
-
-      resolve();
-    });
+    if (!recipient) {
+      throw new Error("A conversation must have a recipient!");
+    }
 
     const conversation = {
       id: recipient.slice(1),
@@ -22,10 +17,10 @@ const onCreateConversation = ({ emitter, createConversation }) => async ({
       modified: new Date(Date.now()).toISOString()
     };
 
-    await createConversation(conversation);
+    const createdConversation = await createConversation(conversation);
 
     emitter.emit(events.CONVERSATION_CREATED, {
-      conversation
+      conversation: createdConversation
     });
   } catch (e) {
     emitter.emit(events.ERROR, {

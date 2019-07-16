@@ -1,4 +1,4 @@
-const events = require("../../events");
+const events = require("@constants/events");
 
 const onListConversation = ({
   callback,
