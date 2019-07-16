@@ -1,18 +1,17 @@
-const { emitter, events, wireEvents } = require("../events");
-const onCreateSms = require("../events/handlers/sms/onCreateSms");
-const onSmsCreated = require("../events/handlers/sms/onSmsCreated");
-const onError = require("../events/handlers/error/onError");
+const emitter = require("@common/emitter");
+const events = require("@constants/events");
+const onCreateSms = require("@events/handlers/sms/onCreateSms");
+const onSmsCreated = require("@events/handlers/sms/onSmsCreated");
+const onError = require("@events/handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
   const { phone } = pathParameters;
   const { body } = JSON.parse(event.body);
 
-  wireEvents({
-    [events.CREATE_SMS]: onCreateSms,
-    [events.SMS_CREATED]: onSmsCreated(callback),
-    [events.ERROR]: onError(callback)
-  });
+  emitter.on(events.CREATE_SMS, onCreateSms);
+  emitter.on(events.SMS_CREATED, onSmsCreated);
+  emitter.on(events.ERROR, onError);
 
   // TODO: Allow sending media
   const payload = {
