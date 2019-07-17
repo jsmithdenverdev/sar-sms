@@ -1,7 +1,7 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
-const onListConveration = require("@events/handlers/conversation/onListConversation");
-const onError = require("@events/handlers/error/onError");
+const onListConveration = require("@handlers/conversation/onListConversation");
+const onError = require("@handlers/error/onError");
 const { listConversations } = require("@lib/conversation");
 
 module.exports.handle = (_event, _context, callback) => {
