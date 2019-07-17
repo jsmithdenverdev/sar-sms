@@ -16,6 +16,10 @@ describe("onCreateConversation", () => {
     emitter.on(events.ERROR, onError);
   });
 
+  beforeEach(() => {
+    onError.mockClear();
+  });
+
   it("emits CONVERSATION_CREATED on createConversation success", () => {
     return onCreateConversation({ emitter, createConversation })({
       recipient: conversation.recipient

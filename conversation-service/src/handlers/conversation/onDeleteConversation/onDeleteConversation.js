@@ -4,15 +4,9 @@ const onDeleteConversation = ({ emitter, deleteConversation }) => async ({
   recipient
 }) => {
   try {
-    // Validate the conversation (TODO: break this into its own function)
-    await new Promise((resolve, reject) => {
-      if (!recipient) {
-        reject("An Phone Number is required to delete a conversation!");
-        return;
-      }
-
-      resolve();
-    });
+    if (!recipient) {
+      throw new Error("You must provide a recipient!");
+    }
 
     await deleteConversation(recipient.slice(1));
 
