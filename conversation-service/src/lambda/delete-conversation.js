@@ -1,8 +1,8 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
-const onDeleteConversation = require("@events/handlers/conversation/onDeleteConversation");
-const onConversationDeleted = require("@events/handlers/conversation/onConversationDeleted");
-const onError = require("@events/handlers/error/onError");
+const onDeleteConversation = require("@handlers/conversation/onDeleteConversation");
+const onConversationDeleted = require("@handlers/conversation/onConversationDeleted");
+const onError = require("@handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;

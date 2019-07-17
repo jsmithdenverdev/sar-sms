@@ -1,7 +1,7 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
-const onUpdateSmsStatus = require("@events/handlers/sms/onUpdateSmsStatus");
-const onError = require("@events/handlers/error/onError");
+const onUpdateSmsStatus = require("@handlers/sms/onUpdateSmsStatus");
+const onError = require("@handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const message = JSON.parse(event.Records[0].Sns.Message);

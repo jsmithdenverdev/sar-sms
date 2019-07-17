@@ -1,8 +1,8 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
-const onCreateSms = require("@events/handlers/sms/onCreateSms");
-const onSmsCreated = require("@events/handlers/sms/onSmsCreated");
-const onError = require("@events/handlers/error/onError");
+const onCreateSms = require("@handlers/sms/onCreateSms");
+const onSmsCreated = require("@handlers/sms/onSmsCreated");
+const onError = require("@handlers/error/onError");
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;

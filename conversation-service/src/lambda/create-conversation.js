@@ -1,8 +1,8 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
-const onCreateConversation = require("@events/handlers/conversation/onCreateConversation");
-const onConversationCreated = require("@events/handlers/conversation/onConversationCreated");
-const onError = require("@events/handlers/error/onError");
+const onCreateConversation = require("@handlers/conversation/onCreateConversation");
+const onConversationCreated = require("@handlers/conversation/onConversationCreated");
+const onError = require("@handlers/error/onError");
 const { createConversation } = require("@lib/conversation");
 
 export const handle = (event, _context, callback) => {
