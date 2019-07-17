@@ -3,20 +3,19 @@ const nodeExternals = require("webpack-node-externals");
 
 module.exports = {
   entry: {
-    createConversation: "./src/handlers/create-conversation.js",
-    createRecievedSms: "./src/handlers/create-recieved-sms.js",
-    createSms: "./src/handlers/create-sms.js",
-    deleteConversation: "./src/handlers/delete-conversation.js",
-    listConversations: "./src/handlers/list-conversations.js",
-    readConversation: "./src/handlers/read-conversation.js",
-    updateSmsStatus: "./src/handlers/update-sms-status.js"
+    createConversation: "./src/lambda/create-conversation.js",
+    createRecievedSms: "./src/lambda/create-recieved-sms.js",
+    createSms: "./src/lambda/create-sms.js",
+    deleteConversation: "./src/lambda/delete-conversation.js",
+    listConversations: "./src/lambda/list-conversations.js",
+    readConversation: "./src/lambda/read-conversation.js",
+    updateSmsStatus: "./src/lambda/update-sms-status.js"
   },
   resolve: {
     extensions: [".js", ".json"],
     alias: {
       "@common": path.resolve(__dirname, "src/common"),
       "@constants": path.resolve(__dirname, "src/constants"),
-      "@events": path.resolve(__dirname, "src/events"),
       "@handlers": path.resolve(__dirname, "src/handlers"),
       "@lib": path.resolve(__dirname, "src/lib")
     }

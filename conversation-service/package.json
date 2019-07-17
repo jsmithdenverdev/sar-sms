@@ -22,7 +22,6 @@
     "moduleNameMapper": {
       "^@common(.*)$": "<rootDir>/src/common/$1",
       "^@constants(.*)$": "<rootDir>/src/constants/$1",
-      "^@events(.*)$": "<rootDir>/src/events/$1",
       "^@handlers(.*)$": "<rootDir>/src/handlers/$1",
       "^@lib(.*)$": "<rootDir>/src/lib/$1"
     }
