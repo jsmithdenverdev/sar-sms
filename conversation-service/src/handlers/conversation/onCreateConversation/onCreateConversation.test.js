@@ -2,7 +2,7 @@ const emitter = require("@common/emitter");
 const events = require("@constants/events");
 const onCreateConversation = require("./onCreateConversation");
 
-const onError = jest.fn();
+let onError;
 const createConversation = jest.fn();
 const onConversationCreated = jest.fn();
 
@@ -11,7 +11,12 @@ const conversation = {
 };
 
 describe("onCreateConversation", () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    // re-initialize the onError mock so the call count is reset
+    onError = jest.fn();
+
+    // re-initailize the event emitter to be in an empty state
+    emitter.removeAllListeners();
     emitter.on(events.CONVERSATION_CREATED, onConversationCreated);
     emitter.on(events.ERROR, onError);
   });
