@@ -29,7 +29,7 @@ const createConversation = conversation =>
     });
   });
 
-const getConversation = id =>
+const readConversation = id =>
   new Promise((resolve, reject) => {
     const params = {
       ...baseParams,
@@ -118,7 +118,7 @@ const listConversations = () =>
 
 module.exports = {
   createConversation,
-  getConversation,
+  readConversation,
   addSmsToConversation,
   deleteConversation,
   listConversations
