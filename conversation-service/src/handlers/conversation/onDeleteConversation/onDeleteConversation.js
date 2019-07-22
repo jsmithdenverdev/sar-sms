@@ -1,17 +1,17 @@
 const events = require("@constants/events");
 
 const onDeleteConversation = ({ emitter, deleteConversation }) => async ({
-  recipient
+  id
 }) => {
   try {
-    if (!recipient) {
-      throw new Error("You must provide a recipient!");
+    if (!id) {
+      throw new Error("You must provide an id!");
     }
 
-    await deleteConversation(recipient.slice(1));
+    await deleteConversation(id);
 
     emitter.emit(events.CONVERSATION_DELETED, {
-      recipient: recipient.slice(1)
+      id
     });
   } catch (e) {
     emitter.emit(events.ERROR, {

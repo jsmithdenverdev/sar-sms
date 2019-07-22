@@ -1,10 +1,10 @@
 const events = require("@constants/events");
 
 const onReadConversation = ({ callback, emitter, readConversation }) => async ({
-  recipient
+  id
 }) => {
   try {
-    const conversation = await readConversation(recipient.slice(1));
+    const conversation = await readConversation(id);
 
     callback(null, {
       statusCode: 200,
