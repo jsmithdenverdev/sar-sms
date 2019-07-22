@@ -3,16 +3,24 @@ const events = require("@constants/events");
 const onReadConversation = require("@handlers/conversation/onReadConversation");
 const onError = require("@handlers/error/onError");
 const { readConversation } = require("@lib/conversation");
+const { wireEvents } = require("@lib/events");
+
+const eventWirer = wireEvents(emitter)(true);
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
   const { id } = pathParameters;
 
-  emitter.on(
-    events.READ_CONVERSATION,
-    onReadConversation({ emitter, callback, readConversation })
-  );
-  emitter.on(events.ERROR, onError({ callback }));
+  eventWirer([
+    {
+      event: events.READ_CONVERSATION,
+      handler: onReadConversation({ emitter, callback, readConversation })
+    },
+    {
+      event: events.ERROR,
+      handler: onError({ callback })
+    }
+  ]);
 
   const payload = {
     id
