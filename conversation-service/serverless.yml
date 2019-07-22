@@ -40,12 +40,8 @@ functions:
     handler: dist/createConversation.handle
     events:
       - http:
-          path: conversation/{id}
+          path: conversation
           method: post
-          request:
-            parameters:
-              paths:
-                id: true
   readConversation:
     handler: dist/readConversation.handle
     events:
