@@ -6,7 +6,7 @@ const { readConversation } = require("@lib/conversation");
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
-  const { phone } = pathParameters;
+  const { id } = pathParameters;
 
   emitter.on(
     events.READ_CONVERSATION,
@@ -15,7 +15,7 @@ module.exports.handle = (event, _context, callback) => {
   emitter.on(events.ERROR, onError({ callback }));
 
   const payload = {
-    recipient: phone
+    id
   };
 
   // Fire off the event to get things rolling
