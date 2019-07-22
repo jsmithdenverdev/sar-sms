@@ -5,6 +5,7 @@ const onCreateConversation = require("./onCreateConversation");
 const onError = jest.fn();
 const createConversation = jest.fn();
 const onConversationCreated = jest.fn();
+const createUUID = jest.fn(() => "1");
 
 const conversation = {
   recipient: "+10000000000"
@@ -21,7 +22,7 @@ describe("onCreateConversation", () => {
   });
 
   it("emits CONVERSATION_CREATED on createConversation success", () => {
-    return onCreateConversation({ emitter, createConversation })({
+    return onCreateConversation({ emitter, createConversation, createUUID })({
       recipient: conversation.recipient
     }).then(() => {
       expect(onConversationCreated.mock.calls.length).toBe(1);
@@ -33,7 +34,7 @@ describe("onCreateConversation", () => {
       throw new Error();
     });
 
-    return onCreateConversation({ emitter, createConversation })({
+    return onCreateConversation({ emitter, createConversation, createUUID })({
       recipient: conversation.recipient
     }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
@@ -41,7 +42,7 @@ describe("onCreateConversation", () => {
   });
 
   it("emits ERROR when no recipient provided", () => {
-    return onCreateConversation({ emitter, createConversation })({
+    return onCreateConversation({ emitter, createConversation, createUUID })({
       recipient: null
     }).then(() => {
       expect(onError.mock.calls.length).toBe(1);

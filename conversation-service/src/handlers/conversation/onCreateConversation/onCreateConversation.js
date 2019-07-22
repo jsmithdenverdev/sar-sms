@@ -1,16 +1,17 @@
 const events = require("@constants/events");
 
-const onCreateConversation = ({ emitter, createConversation }) => async ({
-  recipient
-}) => {
+const onCreateConversation = ({
+  emitter,
+  createConversation,
+  createUUID
+}) => async ({ recipient }) => {
   try {
-    // Validate the conversation (TODO: break this into its own function)
     if (!recipient) {
       throw new Error("A conversation must have a recipient!");
     }
 
     const conversation = {
-      id: recipient.slice(1),
+      id: createUUID(),
       recipient,
       sms: [],
       created: new Date(Date.now()).toISOString(),

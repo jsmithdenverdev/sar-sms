@@ -1,12 +1,13 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
 const onDeleteConversation = require("./onDeleteConversation");
+const uuidv1 = require('uuid/v1');
 
 const onError = jest.fn();
 const onConversationDeleted = jest.fn();
 const deleteConversation = jest.fn();
 
-const recipient = "10000000000";
+const id = uuidv1();
 
 describe("onDeleteConversation", () => {
   beforeAll(() => {
@@ -21,7 +22,7 @@ describe("onDeleteConversation", () => {
 
   it("emits CONVERSATION_DELETED on deleteConversation success", () => {
     return onDeleteConversation({ emitter, deleteConversation })({
-      recipient
+      id
     }).then(() => {
       expect(onConversationDeleted.mock.calls.length).toBe(1);
     });
@@ -33,7 +34,7 @@ describe("onDeleteConversation", () => {
     });
 
     return onDeleteConversation({ emitter, deleteConversation })({
-      recipient
+      id
     }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
@@ -41,7 +42,7 @@ describe("onDeleteConversation", () => {
 
   it("emits ERROR if no recipient is passed in", () => {
     return onDeleteConversation({ emitter, deleteConversation })({
-      recipient: null
+      id: null
     }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
