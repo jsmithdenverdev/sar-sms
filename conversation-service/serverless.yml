@@ -40,42 +40,42 @@ functions:
     handler: dist/createConversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation/{id}
           method: post
           request:
             parameters:
               paths:
-                phone: true
+                id: true
   readConversation:
     handler: dist/readConversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation/{id}
           method: get
           request:
             parameters:
               paths:
-                phone: true
+                id: true
   deleteConversation:
     handler: dist/deleteConversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation/{id}
           method: delete
           request:
             parameters:
               paths:
-                phone: true
+                id: true
   createSms:
     handler: dist/createSms.handle
     events:
       - http:
-          path: conversation/{phone}/sms
+          path: conversation/{id}/sms
           method: post
           request:
             parameters:
               paths:
-                phone: true
+                id: true
   createRecievedSms:
     handler: dist/createRecievedSms.handle
     events:
