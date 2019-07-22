@@ -1,6 +1,6 @@
 const events = require("@constants/events");
 
-const onCreateConversation = ({ emitter, createConversation }) => async ({
+const onCreateConversation = ({ emitter, createConversation, createUUID }) => async ({
   recipient
 }) => {
   try {
@@ -10,7 +10,7 @@ const onCreateConversation = ({ emitter, createConversation }) => async ({
     }
 
     const conversation = {
-      id: recipient.slice(1),
+      id: createUUID(),
       recipient,
       sms: [],
       created: new Date(Date.now()).toISOString(),
