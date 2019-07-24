@@ -1,5 +1,6 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
+const { wireEvents } = require("@lib/events");
 const onCreateConversation = require("./onCreateConversation");
 
 const onError = jest.fn();
@@ -13,8 +14,16 @@ const conversation = {
 
 describe("onCreateConversation", () => {
   beforeAll(() => {
-    emitter.on(events.CONVERSATION_CREATED, onConversationCreated);
-    emitter.on(events.ERROR, onError);
+    wireEvents(emitter)(true)([
+      {
+        event: events.CONVERSATION_CREATED,
+        handler: onConversationCreated
+      },
+      {
+        event: events.ERROR,
+        handler: onError
+      }
+    ]);
   });
 
   beforeEach(() => {
