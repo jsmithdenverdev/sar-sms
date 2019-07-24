@@ -1,7 +1,8 @@
+const uuidv1 = require("uuid/v1");
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
+const { wireEvents } = require("@lib/events");
 const onDeleteConversation = require("./onDeleteConversation");
-const uuidv1 = require('uuid/v1');
 
 const onError = jest.fn();
 const onConversationDeleted = jest.fn();
@@ -11,8 +12,16 @@ const id = uuidv1();
 
 describe("onDeleteConversation", () => {
   beforeAll(() => {
-    emitter.on(events.CONVERSATION_DELETED, onConversationDeleted);
-    emitter.on(events.ERROR, onError);
+    wireEvents(emitter)(true)([
+      {
+        event: events.CONVERSATION_DELETED,
+        handler: onConversationDeleted
+      },
+      {
+        event: events.ERROR,
+        handler: onError
+      }
+    ]);
   });
 
   beforeEach(() => {

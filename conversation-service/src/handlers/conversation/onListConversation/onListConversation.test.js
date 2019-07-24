@@ -1,5 +1,6 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
+const { wireEvents } = require("@lib/events");
 const onListConversation = require("./onListConveration");
 
 const onError = jest.fn();
@@ -19,7 +20,12 @@ const conversations = [
 
 describe("onListConversation", () => {
   beforeAll(() => {
-    emitter.on(events.ERROR, onError);
+    wireEvents(emitter)(true)([
+      {
+        event: events.ERROR,
+        handler: onError
+      }
+    ]);
   });
 
   beforeEach(() => {

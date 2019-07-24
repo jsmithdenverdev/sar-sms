@@ -1,5 +1,6 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
+const { wireEvents } = require("@lib/events");
 const onConversationCreated = require("./onConversationCreated");
 
 const onError = jest.fn();
@@ -8,7 +9,12 @@ const callback = jest.fn();
 describe("onConversationCreated", () => {
   beforeAll(() => {
     // Register events
-    emitter.on(events.ERROR, onError);
+    wireEvents(emitter)(true)([
+      {
+        event: events.ERROR,
+        handler: onError
+      }
+    ]);
   });
 
   it("invokes the provided callback function", () => {
