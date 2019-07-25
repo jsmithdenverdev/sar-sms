@@ -1,7 +1,6 @@
-service: conversation-service # NOTE: update this with your service name
+service: conversation-service
 
 plugins:
-  - serverless-webpack
   - serverless-offline
 
 provider:
@@ -27,68 +26,58 @@ provider:
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
-custom:
-  webpack:
-    webpackConfig: ./webpack.config.js
-    includeModules: true
-    packager: yarn
-
 package:
   individually: true
 
 functions:
   listConversations:
-    handler: src/handlers/list-conversations.handle
+    handler: dist/listConversations.handle
     events:
       - http:
           path: conversation
           method: get
   createConversation:
-    handler: src/handlers/create-conversation.handle
+    handler: dist/createConversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation
           method: post
-          request:
-            parameters:
-              paths:
-                phone: true
   readConversation:
-    handler: src/handlers/read-conversation.handle
+    handler: dist/readConversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation/{id}
           method: get
           request:
             parameters:
               paths:
-                phone: true
+                id: true
   deleteConversation:
-    handler: src/handlers/delete-conversation.handle
+    handler: dist/deleteConversation.handle
     events:
       - http:
-          path: conversation/{phone}
+          path: conversation/{id}
           method: delete
           request:
             parameters:
               paths:
-                phone: true
+                id: true
   createSms:
-    handler: src/handlers/create-sms.handle
+    handler: dist/createSms.handle
     events:
       - http:
-          path: conversation/{phone}/sms
+          path: conversation/{id}/sms
           method: post
           request:
             parameters:
               paths:
-                phone: true
+                id: true
   createRecievedSms:
-    handler: src/handlers/create-recieved-sms.handle
+    handler: dist/createRecievedSms.handle
     events:
       - sns: smsRecieved
   updateSmsStatus:
-    handler: src/handlers/update-sms-status.handle
+    handler: dist/handlers/updateSmsStatus.handle
     events:
       - sns: smsSent
 

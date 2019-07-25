@@ -8,4 +8,4 @@ jspm_packages
 .DS_Store
 
 # Built files
-.webpack
+dist
