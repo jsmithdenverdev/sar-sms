@@ -1,22 +1,23 @@
 const uuidv1 = require("uuid/v1");
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
-const { addSmsToConversation } = require("@lib/conversation");
+const { addSmsToConversation, readConversation } = require("@lib/conversation");
 const { wireEvents } = require("@lib/events");
 const { publishToQueue } = require("@lib/queue");
 const onAddSmsToConversation = require("@handlers/sms/onAddSmsToConversation");
 const onSmsAddedToConversation = require("@handlers/sms/onSmsAddedToConversation");
+const onError = require("@handlers/error/onError");
 
-const eventWirer = wireEvents(emtiter)(true);
+const eventWirer = wireEvents(emitter)(true);
 
-export const handle = (event, context, callback) => {
-  const { pathParameters, body } = event;
+module.exports.handle = (event, _context, callback) => {
+  const { pathParameters } = event;
   const { id } = pathParameters;
-  const { body: messageBody } = JSON.parse(body);
+  const { body } = JSON.parse(event.body);
 
   const payload = {
     conversationId: id,
-    body: messageBody
+    body
   };
 
   eventWirer([
@@ -25,12 +26,17 @@ export const handle = (event, context, callback) => {
       handler: onAddSmsToConversation({
         emitter,
         addSmsToConversation,
+        readConversation,
         createUUID: uuidv1
       })
     },
     {
       event: events.SMS_ADDED,
       handler: onSmsAddedToConversation({ emitter, publishToQueue, callback })
+    },
+    {
+      event: events.ERROR,
+      handler: onError({ callback })
     }
   ]);
 
