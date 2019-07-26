@@ -2,8 +2,8 @@ const SNS = require("aws-sdk/clients/sns");
 
 const publishToQueue = topic => payload =>
   new Promise((resolve, reject) => {
-    const sns = new SNS();
-    sns.publish(
+    const queue = new SNS();
+    queue.publish(
       {
         TopicArn: topic,
         Message: JSON.stringify(payload)
