@@ -3,6 +3,7 @@ const emitter = require("@common/emitter");
 const events = require("@constants/events");
 const { addSmsToConversation } = require("@lib/conversation");
 const { wireEvents } = require("@lib/events");
+const { publishToQueue } = require("@lib/queue");
 const onAddSmsToConversation = require("@handlers/sms/onAddSmsToConversation");
 const onSmsAddedToConversation = require("@handlers/sms/onSmsAddedToConversation");
 
@@ -29,7 +30,7 @@ export const handle = (event, context, callback) => {
     },
     {
       event: events.SMS_ADDED,
-      handler: onSmsAddedToConversation({})
+      handler: onSmsAddedToConversation({ emitter, publishToQueue, callback })
     }
   ]);
 

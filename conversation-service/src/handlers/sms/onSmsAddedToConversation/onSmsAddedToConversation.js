@@ -21,7 +21,7 @@ const onSmsAddedToConversation = ({
     const accountId = process.env.AWS_ACCOUNT_ID;
     const topic = `arn:aws:sns:${region}:${accountId}:sendSms`;
 
-    await publishToQueue({ topic })(JSON.stringify({ sms, recipient }));
+    await publishToQueue({ topic })({ sms, recipient });
 
     callback(null, {
       statusCode: 200,
