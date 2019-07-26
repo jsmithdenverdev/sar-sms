@@ -11,8 +11,8 @@ const onConversationCreated = ({ callback }) => ({ conversation }) => {
         "Content-Type": "application/json"
       }
     });
-  } catch (e) {
-    emitter.emit(events.ERROR, e);
+  } catch (error) {
+    emitter.emit(events.ERROR, { error });
   }
 };
 
