@@ -62,8 +62,8 @@ functions:
             parameters:
               paths:
                 id: true
-  createSms:
-    handler: dist/createSms.handle
+  addSmsToConversation:
+    handler: dist/addSmsToConversation.handle
     events:
       - http:
           path: conversation/{id}/sms
@@ -72,10 +72,6 @@ functions:
             parameters:
               paths:
                 id: true
-  createRecievedSms:
-    handler: dist/createRecievedSms.handle
-    events:
-      - sns: smsRecieved
   updateSmsStatus:
     handler: dist/handlers/updateSmsStatus.handle
     events:
