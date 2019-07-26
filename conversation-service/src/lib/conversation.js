@@ -54,9 +54,12 @@ const addSmsToConversation = (sms, id) =>
       Key: {
         id
       },
-      UpdateExpression: "SET sms = list_append(sms, :s)",
+      UpdateExpression: "SET #sms = list_append(#sms, :s)",
       ExpressionAttributeValues: {
-        ":s": sms
+        ":s": [sms]
+      },
+      ExpressionAttributeNames: {
+        "#sms": "sms"
       },
       ReturnValues: "UPDATED_NEW"
     };
