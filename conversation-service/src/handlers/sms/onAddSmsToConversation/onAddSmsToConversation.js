@@ -16,6 +16,7 @@ const onAddSmsToConversation = ({
     }
 
     const conversation = await readConversation(conversationId);
+    const { recipient } = conversation;
 
     if (!conversation) {
       throw new Error("A conversation was not found for this id!");
@@ -24,6 +25,7 @@ const onAddSmsToConversation = ({
     const sms = {
       id: createUUID(),
       body,
+      recipient,
       created: new Date(Date.now()).toISOString(),
       modified: new Date(Date.now()).toISOString()
     };
@@ -31,8 +33,7 @@ const onAddSmsToConversation = ({
     await addSmsToConversation(sms, conversationId);
 
     const payload = {
-      sms,
-      recipient: conversation.recipient
+      sms
     };
 
     emitter.emit(events.SMS_ADDED, payload);

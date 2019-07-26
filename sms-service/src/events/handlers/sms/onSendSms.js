@@ -8,8 +8,8 @@ const from = process.env.TWILIO_PHONE_NUMBER;
 
 const twilioClient = new twilio(accountSid, authToken);
 
-module.exports = ({ sms, recipient }) => {
-  const { body } = sms;
+module.exports = ({ sms }) => {
+  const { body, recipient } = sms;
   const payload = {
     to: recipient,
     from,

@@ -4,16 +4,10 @@ const onSmsAddedToConversation = ({
   emitter,
   callback,
   publishToQueue
-}) => async ({ sms, recipient }) => {
+}) => async ({ sms }) => {
   try {
     if (!sms) {
       throw new Error("An SMS is required to publish to the send queue!");
-    }
-
-    if (!recipient) {
-      throw new Error(
-        "A recipient is required when publishing this sms to the send queue!"
-      );
     }
 
     // TODO: Place these in a config constant
@@ -21,7 +15,7 @@ const onSmsAddedToConversation = ({
     const accountId = process.env.AWS_ACCOUNT_ID;
     const topic = `arn:aws:sns:${region}:${accountId}:sendSms`;
 
-    await publishToQueue(topic)({ sms, recipient });
+    await publishToQueue(topic)({ sms });
 
     callback(null, {
       statusCode: 200,
