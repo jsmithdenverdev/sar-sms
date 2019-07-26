@@ -3,6 +3,7 @@ const events = require("@constants/events");
 const onAddSmsToConversation = ({
   emitter,
   addSmsToConversation,
+  readConversation,
   createUUID
 }) => async ({ conversationId, body }) => {
   try {
@@ -12,6 +13,12 @@ const onAddSmsToConversation = ({
 
     if (!conversationId) {
       throw new Error("A conversation id is required to add an SMS message!");
+    }
+
+    const conversation = await readConversation(conversationId);
+
+    if (!conversation) {
+      throw new Error("A conversation was not found for this id!");
     }
 
     const sms = {
@@ -24,12 +31,13 @@ const onAddSmsToConversation = ({
     await addSmsToConversation(sms, conversationId);
 
     const payload = {
-      sms
+      sms,
+      recipient: conversation.recipient
     };
 
     emitter.emit(events.SMS_ADDED, payload);
-  } catch (e) {
-    emitter.emit(events.ERROR, e);
+  } catch (error) {
+    emitter.emit(events.ERROR, { error });
   }
 };
 
