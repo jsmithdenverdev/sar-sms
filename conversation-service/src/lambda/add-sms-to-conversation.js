@@ -12,11 +12,11 @@ const eventWirer = wireEvents(emtiter)(true);
 export const handle = (event, context, callback) => {
   const { pathParameters, body } = event;
   const { id } = pathParameters;
-  const { body } = JSON.parse(body);
+  const { body: messageBody } = JSON.parse(body);
 
   const payload = {
     conversationId: id,
-    body
+    body: messageBody
   };
 
   eventWirer([
