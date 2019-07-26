@@ -25,5 +25,6 @@ module.exports = {
     libraryTarget: "commonjs2",
     path: path.join(__dirname, "dist"),
     filename: "[name].js"
-  }
+  },
+  devtool: process.env.NODE_ENV === "production" ? "" : "source-map"
 };
