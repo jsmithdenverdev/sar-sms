@@ -1,22 +1,22 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
 const { wireEvents } = require("@lib/events");
-const onCreateNewSms = require("./onCreateNewSms");
+const onCreateRecievedSms = require("./onCreateRecievedSms");
 
 const onError = jest.fn();
 const addSmsToConversation = jest.fn();
-const onNewSmsCreated = jest.fn();
+const onRecievedSmsCreated = jest.fn();
 const createUUID = jest.fn(() => 1);
-const readConversation = jest.fn(() => ({ recipient: "" }));
-const conversationId = createUUID();
+const readConversationByPhone = jest.fn(() => ({ recipient: "" }));
+const phone = "+10000000000";
 const body = "Test";
 
-describe("onCreateNewSms", () => {
+describe("onCreateRecievedSms", () => {
   beforeAll(() => {
     wireEvents(emitter)(true)([
       {
-        event: events.NEW_SMS_CREATED,
-        handler: onNewSmsCreated
+        event: events.RECIEVED_SMS_CREATED,
+        handler: onRecievedSmsCreated
       },
       {
         event: events.ERROR,
@@ -29,14 +29,14 @@ describe("onCreateNewSms", () => {
     onError.mockClear();
   });
 
-  it("emits SMS_ADDED on addSmsToConversation success", () => {
-    return onCreateNewSms({
+  it("emits RECIEVED_SMS_CREATED on addSmsToConversation success", () => {
+    return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversation,
+      readConversationByPhone,
       createUUID
-    })({ conversationId, body }).then(() => {
-      expect(onNewSmsCreated.mock.calls.length).toBe(1);
+    })({ phone, body }).then(() => {
+      expect(onRecievedSmsCreated.mock.calls.length).toBe(1);
     });
   });
 
@@ -45,21 +45,21 @@ describe("onCreateNewSms", () => {
       throw new Error();
     });
 
-    return onCreateNewSms({
+    return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversation,
+      readConversationByPhone,
       createUUID
-    })({ conversationId, body }).then(() => {
+    })({ phone, body }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
   });
 
-  it("emits ERROR when no conversationId provided", () => {
-    return onCreateNewSms({
+  it("emits ERROR when no phone provided", () => {
+    return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversation,
+      readConversationByPhone,
       createUUID
     })({ body }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
@@ -67,12 +67,12 @@ describe("onCreateNewSms", () => {
   });
 
   it("emits ERROR when no body prodivded", () => {
-    return onCreateNewSms({
+    return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversation,
+      readConversationByPhone,
       createUUID
-    })({ conversationId }).then(() => {
+    })({ phone }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
   });
