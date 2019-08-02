@@ -4,8 +4,8 @@ const events = require("@constants/events");
 const { addSmsToConversation, readConversation } = require("@lib/conversation");
 const { wireEvents } = require("@lib/events");
 const { publishToQueue } = require("@lib/queue");
-const onAddSmsToConversation = require("@handlers/sms/onAddSmsToConversation");
-const onSmsAddedToConversation = require("@handlers/sms/onSmsAddedToConversation");
+const onCreateRecievedSms = require("@handlers/sms/onCreateRecievedSms");
+const onRecievedSmsCreated = require("@handlers/sms/onRecievedSmsCreated");
 const onError = require("@handlers/error/onError");
 
 const eventWirer = wireEvents(emitter)(true);
@@ -22,8 +22,8 @@ module.exports.handle = (event, _context, callback) => {
 
   eventWirer([
     {
-      event: events.ADD_SMS,
-      handler: onAddSmsToConversation({
+      event: events.CREATE_RECIEVED_SMS,
+      handler: onCreateRecievedSms({
         emitter,
         addSmsToConversation,
         readConversation,
@@ -31,8 +31,8 @@ module.exports.handle = (event, _context, callback) => {
       })
     },
     {
-      event: events.SMS_ADDED,
-      handler: onSmsAddedToConversation({ emitter, publishToQueue, callback })
+      event: events.RECIEVED_SMS_CREATED,
+      handler: onRecievedSmsCreated({ emitter, callback })
     },
     {
       event: events.ERROR,
@@ -40,5 +40,5 @@ module.exports.handle = (event, _context, callback) => {
     }
   ]);
 
-  emitter.emit(events.ADD_SMS, payload);
+  emitter.emit(events.CREATE_NEW_SMS, payload);
 };

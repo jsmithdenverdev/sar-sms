@@ -7,7 +7,8 @@ module.exports = {
     readConversation: "./src/lambda/read-conversation.js",
     deleteConversation: "./src/lambda/delete-conversation.js",
     listConversations: "./src/lambda/list-conversations.js",
-    addSmsToConversation: "./src/lambda/add-sms-to-conversation.js"
+    createNewSms: "./src/lambda/create-new-sms.js",
+    createRecievedSms: "./src/lambda/create-recieved-sms.js"
   },
   resolve: {
     extensions: [".js", ".json"],

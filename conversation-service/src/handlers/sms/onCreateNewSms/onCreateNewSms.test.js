@@ -1,21 +1,21 @@
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
 const { wireEvents } = require("@lib/events");
-const onAddSmsToConversation = require("./onAddSmsToConversation");
+const onCreateNewSms = require("./onCreateNewSms");
 
 const onError = jest.fn();
 const addSmsToConversation = jest.fn();
-const onSmsAddedToConversation = jest.fn();
+const onNewSmsCreated = jest.fn();
 const createUUID = jest.fn(() => 1);
 const conversationId = createUUID();
 const body = "Test";
 
-describe("onAddSmsToConversation", () => {
+describe("onCreateNewSms", () => {
   beforeAll(() => {
     wireEvents(emitter)(true)([
       {
-        event: events.SMS_ADDED,
-        handler: onSmsAddedToConversation
+        event: events.NEW_SMS_CREATED,
+        handler: onNewSmsCreated
       },
       {
         event: events.ERROR,
@@ -29,12 +29,12 @@ describe("onAddSmsToConversation", () => {
   });
 
   it("emits SMS_ADDED on addSmsToConversation success", () => {
-    return onAddSmsToConversation({
+    return onCreateNewSms({
       emitter,
       addSmsToConversation,
       createUUID
     })({ conversationId, body }).then(() => {
-      expect(onSmsAddedToConversation.mock.calls.length).toBe(1);
+      expect(onNewSmsCreated.mock.calls.length).toBe(1);
     });
   });
 
@@ -43,7 +43,7 @@ describe("onAddSmsToConversation", () => {
       throw new Error();
     });
 
-    return onAddSmsToConversation({
+    return onCreateNewSms({
       emitter,
       addSmsToConversation,
       createUUID
@@ -53,7 +53,7 @@ describe("onAddSmsToConversation", () => {
   });
 
   it("emits ERROR when no conversationId provided", () => {
-    return onAddSmsToConversation({
+    return onCreateNewSms({
       emitter,
       addSmsToConversation,
       createUUID
@@ -63,7 +63,7 @@ describe("onAddSmsToConversation", () => {
   });
 
   it("emits ERROR when no body prodivded", () => {
-    return onAddSmsToConversation({
+    return onCreateNewSms({
       emitter,
       addSmsToConversation,
       createUUID

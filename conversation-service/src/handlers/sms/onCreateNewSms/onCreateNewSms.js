@@ -1,6 +1,6 @@
 const events = require("@constants/events");
 
-const onAddSmsToConversation = ({
+const onCreateNewSms = ({
   emitter,
   addSmsToConversation,
   readConversation,
@@ -36,10 +36,10 @@ const onAddSmsToConversation = ({
       sms
     };
 
-    emitter.emit(events.SMS_ADDED, payload);
+    emitter.emit(events.NEW_SMS_CREATED, payload);
   } catch (error) {
     emitter.emit(events.ERROR, { error });
   }
 };
 
-module.exports = onAddSmsToConversation;
+module.exports = onCreateNewSms;

@@ -1,6 +1,6 @@
 const events = require("@constants/events");
 
-const onSmsAddedToConversation = ({
+const onNewSmsCreated = ({
   emitter,
   callback,
   publishToQueue
@@ -30,4 +30,4 @@ const onSmsAddedToConversation = ({
   }
 };
 
-module.exports = onSmsAddedToConversation;
+module.exports = onNewSmsCreated;
