@@ -1,30 +1,32 @@
 const events = require("@constants/events");
 
-const onCreateNewSms = ({
+const onCreateRecievedSms = ({
   emitter,
   addSmsToConversation,
-  readConversation,
+  readConversationByPhone,
   createUUID
-}) => async ({ conversationId, body }) => {
+}) => async ({ phone, body }) => {
   try {
     if (!body) {
       throw new Error("An SMS message must have a body!");
     }
 
-    if (!conversationId) {
-      throw new Error("A conversation id is required to add an SMS message!");
+    if (!phone) {
+      throw new Error("A phone number is required to add a message to a conversation!");
     }
 
-    const conversation = await readConversation(conversationId);
+    const conversation = await readConversationByPhone(phone);
 
     if (!conversation) {
       throw new Error("A conversation was not found for this id!");
     }
 
+    const { id: conversationId, recipient } = conversation;
+
     const sms = {
       id: createUUID(),
       body,
-      recipient: "SYSTEM",
+      recipient,
       created: new Date(Date.now()).toISOString(),
       modified: new Date(Date.now()).toISOString()
     };
@@ -41,4 +43,4 @@ const onCreateNewSms = ({
   }
 };
 
-module.exports = onCreateNewSms;
+module.exports = onCreateRecievedSms;
