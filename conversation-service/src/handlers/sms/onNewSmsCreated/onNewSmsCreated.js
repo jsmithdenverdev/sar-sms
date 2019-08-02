@@ -1,18 +1,22 @@
 const events = require("@constants/events");
 
-const onSmsCreated = ({ callback, publishToQueue, emitter }) => async ({
-  sms,
-  recipient
-}) => {
+const onNewSmsCreated = ({
+  emitter,
+  callback,
+  publishToQueue
+}) => async ({ sms }) => {
   try {
+    if (!sms) {
+      throw new Error("An SMS is required to publish to the send queue!");
+    }
+
+    // TODO: Place these in a config constant
     const region = process.env.REGION;
     const accountId = process.env.AWS_ACCOUNT_ID;
     const topic = `arn:aws:sns:${region}:${accountId}:sendSms`;
 
-    // When a new sms is created it needs to be queued up to be sent
-    await publishToQueue({ topic })(JSON.stringify({ sms, recipient }));
+    await publishToQueue(topic)({ sms });
 
-    // Call the AWS callback to return a response to the user
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(sms),
@@ -21,11 +25,9 @@ const onSmsCreated = ({ callback, publishToQueue, emitter }) => async ({
         "Content-Type": "application/json"
       }
     });
-  } catch (e) {
-    emitter.emit(events.ERROR, {
-      error: e
-    });
+  } catch (error) {
+    emitter.emit(events.ERROR, { error });
   }
 };
 
-module.exports = onSmsCreated;
+module.exports = onNewSmsCreated;

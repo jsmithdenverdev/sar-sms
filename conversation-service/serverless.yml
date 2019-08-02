@@ -62,8 +62,8 @@ functions:
             parameters:
               paths:
                 id: true
-  createSms:
-    handler: dist/createSms.handle
+  createNewSms:
+    handler: dist/createNewSms.handle
     events:
       - http:
           path: conversation/{id}/sms

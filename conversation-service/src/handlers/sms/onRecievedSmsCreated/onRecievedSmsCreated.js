@@ -1,11 +1,10 @@
-const emitter = require("@common/emitter");
 const events = require("@constants/events");
 
-const onConversationCreated = ({ callback }) => ({ conversation }) => {
+const onRecievedSmsCreated = ({ emitter, callback }) => async ({ sms }) => {
   try {
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(conversation),
+      body: JSON.stringify(sms),
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json"
@@ -16,4 +15,4 @@ const onConversationCreated = ({ callback }) => ({ conversation }) => {
   }
 };
 
-module.exports = onConversationCreated;
+module.exports = onRecievedSmsCreated;

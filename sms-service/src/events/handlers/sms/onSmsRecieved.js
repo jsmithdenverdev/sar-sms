@@ -3,7 +3,7 @@ const SNS = require("aws-sdk/clients/sns");
 const emitter = require("../../emitter");
 const events = require("../../events");
 
-module.exports = callback => ({ body, recipient }) => {
+module.exports = callback => ({ body, phone }) => {
   const { twiml } = twilio;
   const { MessagingResponse } = twiml;
 
@@ -19,7 +19,7 @@ module.exports = callback => ({ body, recipient }) => {
   sns.publish(
     {
       TopicArn: topicArn,
-      Message: JSON.stringify({ body, recipient })
+      Message: JSON.stringify({ body, phone })
     },
     err => {
       if (err) {

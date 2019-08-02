@@ -9,7 +9,7 @@ const uuidv1 = require("uuid/v1");
 
 const eventWirer = wireEvents(emitter)(true);
 
-export const handle = (event, _context, callback) => {
+module.exports.handle = (event, _context, callback) => {
   eventWirer([
     {
       event: events.CREATE_CONVERSATION,

@@ -47,6 +47,28 @@ const readConversation = id =>
     });
   });
 
+const readConversationByPhone = phone =>
+  new Promise((resolve, reject) => {
+    const params = {
+      ...baseParams,
+      KeyConditionExpression: "recipient = :r",
+      ExpressionAttributeValues: {
+        ":r": {
+          S: phone
+        }
+      }
+    }
+
+    client.query(params, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        // Assuming one conversation per recipient
+        resolve(data.Items[0]);
+      }
+    })
+  });
+
 const addSmsToConversation = (sms, id) =>
   new Promise((resolve, reject) => {
     const params = {
@@ -54,9 +76,12 @@ const addSmsToConversation = (sms, id) =>
       Key: {
         id
       },
-      UpdateExpression: "SET sms = list_append(sms, :s)",
+      UpdateExpression: "SET #sms = list_append(#sms, :s)",
       ExpressionAttributeValues: {
-        ":s": sms
+        ":s": [sms]
+      },
+      ExpressionAttributeNames: {
+        "#sms": "sms"
       },
       ReturnValues: "UPDATED_NEW"
     };
@@ -119,6 +144,7 @@ const listConversations = () =>
 module.exports = {
   createConversation,
   readConversation,
+  readConversationByPhone,
   addSmsToConversation,
   deleteConversation,
   listConversations
