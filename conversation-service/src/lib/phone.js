@@ -1,8 +1,8 @@
-const { parsePhoneNumber: libPhoneNumberParse } = require("libphonenumber-js");
+const { parsePhoneNumber: libParsePhoneNumber } = require("libphonenumber-js");
 
 const parsePhoneNumber = phoneNumber => {
   try {
-    const parsed = libPhoneNumberParse(phoneNumber, "US");
+    const parsed = libParsePhoneNumber(phoneNumber, "US");
     const { number } = parsed;
 
     return number;
