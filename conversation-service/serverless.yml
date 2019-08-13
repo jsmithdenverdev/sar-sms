@@ -46,32 +46,32 @@ functions:
     handler: dist/readConversation.handle
     events:
       - http:
-          path: conversation/{id}
+          path: conversation/{recipient}
           method: get
           request:
             parameters:
               paths:
-                id: true
+                recipient: true
   deleteConversation:
     handler: dist/deleteConversation.handle
     events:
       - http:
-          path: conversation/{id}
+          path: conversation/{recipient}
           method: delete
           request:
             parameters:
               paths:
-                id: true
+                recipient: true
   createNewSms:
     handler: dist/createNewSms.handle
     events:
       - http:
-          path: conversation/{id}/sms
+          path: conversation/{recipient}/sms
           method: post
           request:
             parameters:
               paths:
-                id: true
+                recipient: true
   createRecievedSms:
     handler: dist/createRecievedSms.handle
     events:
@@ -89,11 +89,11 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: id
+            AttributeName: recipient
             AttributeType: S
         KeySchema:
           -
-            AttributeName: id
+            AttributeName: recipient
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
