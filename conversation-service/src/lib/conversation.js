@@ -29,12 +29,12 @@ const createConversation = conversation =>
     });
   });
 
-const readConversation = id =>
+const readConversation = recipient =>
   new Promise((resolve, reject) => {
     const params = {
       ...baseParams,
       Key: {
-        id
+        recipient
       }
     };
 
@@ -69,12 +69,12 @@ const readConversationByPhone = phone =>
     })
   });
 
-const addSmsToConversation = (sms, id) =>
+const addSmsToConversation = (sms, recipient) =>
   new Promise((resolve, reject) => {
     const params = {
       ...baseParams,
       Key: {
-        id
+        recipient
       },
       UpdateExpression: "SET #sms = list_append(#sms, :s)",
       ExpressionAttributeValues: {
@@ -95,12 +95,12 @@ const addSmsToConversation = (sms, id) =>
     });
   });
 
-const deleteConversation = id =>
+const deleteConversation = recipient =>
   new Promise((resolve, reject) => {
     const params = {
       ...baseParams,
       Key: {
-        id
+        recipient
       }
     };
 
