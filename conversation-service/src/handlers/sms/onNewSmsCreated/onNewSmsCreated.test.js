@@ -8,7 +8,8 @@ const publishToQueue = jest.fn(() => () => Promise.resolve());
 const callback = jest.fn();
 
 const sms = {
-  body: "test"
+  body: "test",
+  recipient: "+10000000000"
 };
 
 describe("onNewSmsCreated", () => {
@@ -46,7 +47,9 @@ describe("onNewSmsCreated", () => {
   });
 
   it("emits ERROR if no sms provided", () => {
-    return onNewSmsCreated({ emitter, callback, publishToQueue })().then(() => {
+    return onNewSmsCreated({ emitter, callback, publishToQueue })({
+      sms: null
+    }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
   });
