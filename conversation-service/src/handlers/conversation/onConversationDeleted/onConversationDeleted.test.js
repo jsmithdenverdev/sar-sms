@@ -6,7 +6,7 @@ const onConversationDeleted = require("./onConversationDeleted");
 const onError = jest.fn();
 const callback = jest.fn();
 
-const recipient = "+11111111111";
+const recipient = "+10000000000";
 
 describe("onConversationDeleted", () => {
   beforeAll(() => {

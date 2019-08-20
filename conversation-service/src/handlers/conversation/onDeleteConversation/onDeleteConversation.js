@@ -1,17 +1,20 @@
 const events = require("@constants/events");
 
-const onDeleteConversation = ({ emitter, deleteConversation }) => async ({
-  id
-}) => {
+const onDeleteConversation = ({
+  emitter,
+  deleteConversation,
+  parsePhoneNumber
+}) => async ({ recipient }) => {
   try {
-    if (!id) {
-      throw new Error("You must provide an id!");
+    if (!recipient) {
+      throw new Error("You must provide a recipient!");
     }
 
-    await deleteConversation(id);
+    const parsedRecipient = parsePhoneNumber(recipient);
+    await deleteConversation(parsedRecipient);
 
     emitter.emit(events.CONVERSATION_DELETED, {
-      id
+      recipient: parsedRecipient
     });
   } catch (e) {
     emitter.emit(events.ERROR, {
