@@ -3,13 +3,12 @@ const events = require("@constants/events");
 const { wireEvents } = require("@lib/events");
 const onCreateRecievedSms = require("./onCreateRecievedSms");
 
+const recipient = "+10000000000";
+const body = "Test";
 const onError = jest.fn();
 const addSmsToConversation = jest.fn();
 const onRecievedSmsCreated = jest.fn();
-const createUUID = jest.fn(() => 1);
-const readConversationByPhone = jest.fn(() => ({ recipient: "" }));
-const phone = "+10000000000";
-const body = "Test";
+const parsePhoneNumber = jest.fn(() => recipient);
 
 describe("onCreateRecievedSms", () => {
   beforeAll(() => {
@@ -33,9 +32,8 @@ describe("onCreateRecievedSms", () => {
     return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversationByPhone,
-      createUUID
-    })({ phone, body }).then(() => {
+      parsePhoneNumber
+    })({ recipient, body }).then(() => {
       expect(onRecievedSmsCreated.mock.calls.length).toBe(1);
     });
   });
@@ -48,9 +46,8 @@ describe("onCreateRecievedSms", () => {
     return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversationByPhone,
-      createUUID
-    })({ phone, body }).then(() => {
+      parsePhoneNumber
+    })({ recipient, body }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
   });
@@ -59,8 +56,7 @@ describe("onCreateRecievedSms", () => {
     return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversationByPhone,
-      createUUID
+      parsePhoneNumber
     })({ body }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
@@ -70,9 +66,8 @@ describe("onCreateRecievedSms", () => {
     return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
-      readConversationByPhone,
-      createUUID
-    })({ phone }).then(() => {
+      parsePhoneNumber
+    })({ recipient }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
   });

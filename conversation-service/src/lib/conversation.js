@@ -57,7 +57,7 @@ const readConversationByPhone = phone =>
           S: phone
         }
       }
-    }
+    };
 
     client.query(params, (err, data) => {
       if (err) {
@@ -66,11 +66,15 @@ const readConversationByPhone = phone =>
         // Assuming one conversation per recipient
         resolve(data.Items[0]);
       }
-    })
+    });
   });
 
 const addSmsToConversation = (sms, recipient) =>
   new Promise((resolve, reject) => {
+    if (!recipient) {
+      reject("A recipient is required to add an sms!");
+    }
+
     const params = {
       ...baseParams,
       Key: {

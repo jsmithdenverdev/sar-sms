@@ -3,35 +3,29 @@ const events = require("@constants/events");
 const onCreateRecievedSms = ({
   emitter,
   addSmsToConversation,
-  readConversationByPhone,
-  createUUID
-}) => async ({ phone, body }) => {
+  parsePhoneNumber
+}) => async ({ recipient, body }) => {
   try {
+    if (!recipient) {
+      throw new Error(
+        "A recipient is required to add a message to a conversation!"
+      );
+    }
+
     if (!body) {
       throw new Error("An SMS message must have a body!");
     }
 
-    if (!phone) {
-      throw new Error("A phone number is required to add a message to a conversation!");
-    }
-
-    const conversation = await readConversationByPhone(phone);
-
-    if (!conversation) {
-      throw new Error("A conversation was not found for this id!");
-    }
-
-    const { id: conversationId, recipient } = conversation;
+    const parsedRecipient = parsePhoneNumber(recipient);
 
     const sms = {
-      id: createUUID(),
       body,
-      recipient,
+      recipient: "SYSTEM", // We recieved this sms
       created: new Date(Date.now()).toISOString(),
       modified: new Date(Date.now()).toISOString()
     };
 
-    await addSmsToConversation(sms, conversationId);
+    await addSmsToConversation(sms, parsedRecipient);
 
     const payload = {
       sms

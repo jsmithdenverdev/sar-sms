@@ -19,7 +19,7 @@ module.exports = callback => ({ body, phone }) => {
   sns.publish(
     {
       TopicArn: topicArn,
-      Message: JSON.stringify({ body, phone })
+      Message: JSON.stringify({ body, recipient: phone })
     },
     err => {
       if (err) {
