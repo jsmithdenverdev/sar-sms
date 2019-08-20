@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.441.0",
+    "libphonenumber-js": "^1.7.22",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

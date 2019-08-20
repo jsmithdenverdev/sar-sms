@@ -6,9 +6,9 @@ const onCreateNewSms = require("./onCreateNewSms");
 const onError = jest.fn();
 const addSmsToConversation = jest.fn();
 const onNewSmsCreated = jest.fn();
-const createUUID = jest.fn(() => 1);
-const readConversation = jest.fn(() => ({ recipient: "" }));
-const conversationId = createUUID();
+const recipient = "+10000000000";
+const parsePhoneNumber = jest.fn(_ => recipient);
+const readConversation = jest.fn(() => ({ recipient }));
 const body = "Test";
 
 describe("onCreateNewSms", () => {
@@ -34,8 +34,8 @@ describe("onCreateNewSms", () => {
       emitter,
       addSmsToConversation,
       readConversation,
-      createUUID
-    })({ conversationId, body }).then(() => {
+      parsePhoneNumber
+    })({ recipient, body }).then(() => {
       expect(onNewSmsCreated.mock.calls.length).toBe(1);
     });
   });
@@ -49,31 +49,41 @@ describe("onCreateNewSms", () => {
       emitter,
       addSmsToConversation,
       readConversation,
-      createUUID
-    })({ conversationId, body }).then(() => {
+      parsePhoneNumber
+    })({ recipient, body }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
   });
 
-  it("emits ERROR when no conversationId provided", () => {
-    return onCreateNewSms({
+  it("emits ERROR when no recipient provided", async () => {
+    await onCreateNewSms({
       emitter,
       addSmsToConversation,
       readConversation,
-      createUUID
-    })({ body }).then(() => {
-      expect(onError.mock.calls.length).toBe(1);
-    });
+      parsePhoneNumber
+    })({ body });
+
+    const onErrorPayload = onError.mock.calls[0][0];
+    const { error } = onErrorPayload;
+    const { message } = error;
+
+    expect(onError.mock.calls.length).toBe(1);
+    expect(message).toBe("A recipient is required to send an SMS message!");
   });
 
-  it("emits ERROR when no body prodivded", () => {
-    return onCreateNewSms({
+  it("emits ERROR when no body prodivded", async () => {
+    await onCreateNewSms({
       emitter,
       addSmsToConversation,
       readConversation,
-      createUUID
-    })({ conversationId }).then(() => {
-      expect(onError.mock.calls.length).toBe(1);
-    });
+      parsePhoneNumber
+    })({ recipient });
+
+    const onErrorPayload = onError.mock.calls[0][0];
+    const { error } = onErrorPayload;
+    const { message } = error;
+
+    expect(onError.mock.calls.length).toBe(1);
+    expect(message).toBe("An SMS message must have a body!");
   });
 });

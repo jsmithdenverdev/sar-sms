@@ -4,17 +4,23 @@ const onReadConversation = require("@handlers/conversation/onReadConversation");
 const onError = require("@handlers/error/onError");
 const { readConversation } = require("@lib/conversation");
 const { wireEvents } = require("@lib/events");
+const { parsePhoneNumber } = require("@lib/phone");
 
 const eventWirer = wireEvents(emitter)(true);
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
-  const { id } = pathParameters;
+  const { recipient } = pathParameters;
 
   eventWirer([
     {
       event: events.READ_CONVERSATION,
-      handler: onReadConversation({ emitter, callback, readConversation })
+      handler: onReadConversation({
+        emitter,
+        callback,
+        readConversation,
+        parsePhoneNumber
+      })
     },
     {
       event: events.ERROR,
@@ -23,7 +29,7 @@ module.exports.handle = (event, _context, callback) => {
   ]);
 
   const payload = {
-    id
+    recipient
   };
 
   // Fire off the event to get things rolling

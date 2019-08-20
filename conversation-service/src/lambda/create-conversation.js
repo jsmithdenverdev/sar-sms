@@ -5,7 +5,8 @@ const onConversationCreated = require("@handlers/conversation/onConversationCrea
 const onError = require("@handlers/error/onError");
 const { createConversation } = require("@lib/conversation");
 const { wireEvents } = require("@lib/events");
-const uuidv1 = require("uuid/v1");
+const { parsePhoneNumber } = require("@lib/phone");
+
 
 const eventWirer = wireEvents(emitter)(true);
 
@@ -16,7 +17,7 @@ module.exports.handle = (event, _context, callback) => {
       handler: onCreateConversation({
         emitter,
         createConversation,
-        createUUID: uuidv1
+        parsePhoneNumber
       })
     },
     {

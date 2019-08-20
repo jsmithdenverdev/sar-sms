@@ -1,8 +1,11 @@
-const uuidv1 = require("uuid/v1");
 const emitter = require("@common/emitter");
 const events = require("@constants/events");
-const { addSmsToConversation, readConversationByPhone } = require("@lib/conversation");
+const {
+  addSmsToConversation,
+  readConversationByPhone
+} = require("@lib/conversation");
 const { wireEvents } = require("@lib/events");
+const { parsePhoneNumber } = require("@lib/phone");
 const onCreateRecievedSms = require("@handlers/sms/onCreateRecievedSms");
 const onRecievedSmsCreated = require("@handlers/sms/onRecievedSmsCreated");
 const onError = require("@handlers/error/onError");
@@ -10,11 +13,11 @@ const onError = require("@handlers/error/onError");
 const eventWirer = wireEvents(emitter)(true);
 
 module.exports.handle = (event, _context, callback) => {
-  const { body, phone } = JSON.parse(event.Records[0].Sns.Message);
+  const { body, recipient } = JSON.parse(event.Records[0].Sns.Message);
 
   const payload = {
     body,
-    phone
+    recipient
   };
 
   eventWirer([
@@ -24,7 +27,7 @@ module.exports.handle = (event, _context, callback) => {
         emitter,
         addSmsToConversation,
         readConversationByPhone,
-        createUUID: uuidv1
+        parsePhoneNumber
       })
     },
     {

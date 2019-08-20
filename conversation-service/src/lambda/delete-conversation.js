@@ -5,17 +5,22 @@ const onConversationDeleted = require("@handlers/conversation/onConversationDele
 const onError = require("@handlers/error/onError");
 const { deleteConversation } = require("@lib/conversation");
 const { wireEvents } = require("@lib/events");
+const { parsePhoneNumber } = require("@lib/phone");
 
 const eventWirer = wireEvents(emitter)(true);
 
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
-  const { id } = pathParameters;
+  const { recipient } = pathParameters;
 
   eventWirer([
     {
       event: events.DELETE_CONVERSATION,
-      handler: onDeleteConversation({ emitter, deleteConversation })
+      handler: onDeleteConversation({
+        emitter,
+        deleteConversation,
+        parsePhoneNumber
+      })
     },
     {
       event: events.CONVERSATION_DELETED,
@@ -28,7 +33,7 @@ module.exports.handle = (event, _context, callback) => {
   ]);
 
   const payload = {
-    id
+    recipient
   };
 
   emitter.emit(events.DELETE_CONVERSATION, payload);

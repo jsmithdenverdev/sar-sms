@@ -7,8 +7,10 @@ const onError = jest.fn();
 const publishToQueue = jest.fn(() => () => Promise.resolve());
 const callback = jest.fn();
 
-const sms = {};
-const recipient = "0000000000";
+const sms = {
+  body: "test",
+  recipient: "+10000000000"
+};
 
 describe("onNewSmsCreated", () => {
   beforeAll(() => {
@@ -26,19 +28,19 @@ describe("onNewSmsCreated", () => {
 
   it("calls provided callback on publishToQueue success ", () => {
     return onNewSmsCreated({ emitter, callback, publishToQueue })({
-      sms,
-      recipient
+      sms
     }).then(() => {
       expect(callback.mock.calls.length).toBe(1);
     });
   });
 
   it("emits ERROR on publishToQueue failure", () => {
-    publishToQueue.mockImplementation(() => () => Promise.reject());
+    publishToQueue.mockImplementation(() => {
+      throw new Error();
+    });
 
     return onNewSmsCreated({ emitter, callback, publishToQueue })({
-      sms,
-      recipient
+      sms
     }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
@@ -46,17 +48,21 @@ describe("onNewSmsCreated", () => {
 
   it("emits ERROR if no sms provided", () => {
     return onNewSmsCreated({ emitter, callback, publishToQueue })({
-      recipient
+      sms: null
     }).then(() => {
       expect(onError.mock.calls.length).toBe(1);
     });
   });
 
-  it("emits ERROR if no recipient provided", () => {
+  it("invokes the provided callback function", () => {
     return onNewSmsCreated({ emitter, callback, publishToQueue })({
       sms
     }).then(() => {
-      expect(onError.mock.calls.length).toBe(1);
+      const callbackParam = callback.mock.calls[0][1];
+
+      expect(callback.mock.calls.length).toBe(1);
+      expect(callbackParam.body).toBeTruthy();
+      expect(callbackParam.body).toBe(JSON.stringify(sms));
     });
   });
 });

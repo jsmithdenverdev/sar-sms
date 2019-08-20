@@ -1,10 +1,18 @@
 const events = require("@constants/events");
 
-const onReadConversation = ({ callback, emitter, readConversation }) => async ({
-  id
-}) => {
+const onReadConversation = ({
+  callback,
+  emitter,
+  readConversation,
+  parsePhoneNumber
+}) => async ({ recipient }) => {
   try {
-    const conversation = await readConversation(id);
+    if (!recipient) {
+      throw new Error("A recipient is required to load a conversation!");
+    }
+
+    const parsedRecipient = parsePhoneNumber(recipient);
+    const conversation = await readConversation(parsedRecipient);
 
     callback(null, {
       statusCode: 200,

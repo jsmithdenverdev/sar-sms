@@ -3,16 +3,17 @@ const events = require("@constants/events");
 const onCreateConversation = ({
   emitter,
   createConversation,
-  createUUID
+  parsePhoneNumber
 }) => async ({ recipient }) => {
   try {
     if (!recipient) {
       throw new Error("A conversation must have a recipient!");
     }
 
+    const parsedRecipient = parsePhoneNumber(recipient);
+
     const conversation = {
-      id: createUUID(),
-      recipient,
+      recipient: parsedRecipient,
       sms: [],
       created: new Date(Date.now()).toISOString(),
       modified: new Date(Date.now()).toISOString()

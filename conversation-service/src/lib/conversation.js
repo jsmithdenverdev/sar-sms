@@ -29,12 +29,12 @@ const createConversation = conversation =>
     });
   });
 
-const readConversation = id =>
+const readConversation = recipient =>
   new Promise((resolve, reject) => {
     const params = {
       ...baseParams,
       Key: {
-        id
+        recipient
       }
     };
 
@@ -57,7 +57,7 @@ const readConversationByPhone = phone =>
           S: phone
         }
       }
-    }
+    };
 
     client.query(params, (err, data) => {
       if (err) {
@@ -66,15 +66,19 @@ const readConversationByPhone = phone =>
         // Assuming one conversation per recipient
         resolve(data.Items[0]);
       }
-    })
+    });
   });
 
-const addSmsToConversation = (sms, id) =>
+const addSmsToConversation = (sms, recipient) =>
   new Promise((resolve, reject) => {
+    if (!recipient) {
+      reject("A recipient is required to add an sms!");
+    }
+
     const params = {
       ...baseParams,
       Key: {
-        id
+        recipient
       },
       UpdateExpression: "SET #sms = list_append(#sms, :s)",
       ExpressionAttributeValues: {
@@ -95,12 +99,12 @@ const addSmsToConversation = (sms, id) =>
     });
   });
 
-const deleteConversation = id =>
+const deleteConversation = recipient =>
   new Promise((resolve, reject) => {
     const params = {
       ...baseParams,
       Key: {
-        id
+        recipient
       }
     };
 

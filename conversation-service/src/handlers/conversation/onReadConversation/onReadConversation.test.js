@@ -3,11 +3,11 @@ const events = require("@constants/events");
 const { wireEvents } = require("@lib/events");
 const onReadConversation = require("./onReadConversation");
 
+const recipient = "+10000000000";
 const onError = jest.fn();
 const readConversation = jest.fn();
 const callback = jest.fn();
-
-const recipient = "+11234567890";
+const parsePhoneNumber = jest.fn(_ => recipient);
 
 describe("onReadConversation", () => {
   beforeAll(() => {
@@ -24,7 +24,12 @@ describe("onReadConversation", () => {
   });
 
   it("calls provided callback on readConversation success", () => {
-    return onReadConversation({ callback, emitter, readConversation })({
+    return onReadConversation({
+      callback,
+      emitter,
+      readConversation,
+      parsePhoneNumber
+    })({
       recipient
     }).then(() => {
       expect(callback.mock.calls.length).toBe(1);
@@ -36,7 +41,12 @@ describe("onReadConversation", () => {
       throw new Error();
     });
 
-    return onReadConversation({ callback, emitter, readConversation })({
+    return onReadConversation({
+      callback,
+      emitter,
+      readConversation,
+      parsePhoneNumber
+    })({
       recipient
     }).then(() => {
       expect(callback.mock.calls.length).toBe(1);
@@ -44,7 +54,12 @@ describe("onReadConversation", () => {
   });
 
   it("emits ERROR when no recipient passed in", () => {
-    return onReadConversation({ callback, emitter, readConversation })({
+    return onReadConversation({
+      callback,
+      emitter,
+      readConversation,
+      parsePhoneNumber
+    })({
       recipient: null
     }).then(() => {
       expect(callback.mock.calls.length).toBe(1);
