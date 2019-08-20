@@ -6,7 +6,7 @@ const parsePhoneNumber = phoneNumber => {
     const { number } = parsed;
 
     return number;
-  } catch (e) {
+  } catch {
     throw new Error("Number was not recognized, or was in an invalid format!");
   }
 };
