@@ -4,33 +4,32 @@ const onCreateNewSms = ({
   emitter,
   addSmsToConversation,
   readConversation,
-  createUUID
-}) => async ({ conversationId, body }) => {
+  parsePhoneNumber
+}) => async ({ recipient, body }) => {
   try {
     if (!body) {
       throw new Error("An SMS message must have a body!");
     }
 
-    if (!conversationId) {
-      throw new Error("A conversation id is required to add an SMS message!");
+    if (!recipient) {
+      throw new Error("A recipient is required to send an SMS message!");
     }
 
-    const conversation = await readConversation(conversationId);
-    const { recipient } = conversation;
+    const parsedRecipient = parsePhoneNumber(recipient);
+    const conversation = await readConversation(parsedRecipient);
 
     if (!conversation) {
       throw new Error("A conversation was not found for this id!");
     }
 
     const sms = {
-      id: createUUID(),
       body,
-      recipient,
+      recipient: parsedRecipient,
       created: new Date(Date.now()).toISOString(),
       modified: new Date(Date.now()).toISOString()
     };
 
-    await addSmsToConversation(sms, conversationId);
+    await addSmsToConversation(sms, parsedRecipient);
 
     const payload = {
       sms
