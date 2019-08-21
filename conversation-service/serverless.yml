@@ -1,8 +1,5 @@
 service: conversation-service
 
-plugins:
-  - serverless-offline
-
 provider:
   name: aws
   runtime: nodejs8.10
@@ -28,6 +25,11 @@ provider:
 
 package:
   individually: true
+  exclude:
+    - node_modules/**
+    - src/**
+    - .vscode/**
+    - dist/**
 
 functions:
   listConversations:
@@ -36,12 +38,18 @@ functions:
       - http:
           path: conversation
           method: get
+    package:
+      include:
+        - dist/listConversations.js
   createConversation:
     handler: dist/createConversation.handle
     events:
       - http:
           path: conversation
           method: post
+    package:
+      include:
+        - dist/createConversation.js
   readConversation:
     handler: dist/readConversation.handle
     events:
@@ -52,6 +60,9 @@ functions:
             parameters:
               paths:
                 recipient: true
+    package:
+      include:
+        - dist/readConversation.js
   deleteConversation:
     handler: dist/deleteConversation.handle
     events:
@@ -62,6 +73,9 @@ functions:
             parameters:
               paths:
                 recipient: true
+    package:
+      include:
+        - dist/deleteConversation.js
   createNewSms:
     handler: dist/createNewSms.handle
     events:
@@ -72,28 +86,28 @@ functions:
             parameters:
               paths:
                 recipient: true
+    package:
+      include:
+        - dist/createNewSms.js
   createRecievedSms:
     handler: dist/createRecievedSms.handle
     events:
       - sns: smsRecieved
-  updateSmsStatus:
-    handler: dist/handlers/updateSmsStatus.handle
-    events:
-      - sns: smsSent
+    package:
+      include:
+        - dist/createRecievedSms.js
 
 resources:
   Resources:
     ConversationDynamoTable:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          -
-            AttributeName: recipient
+          - AttributeName: recipient
             AttributeType: S
         KeySchema:
-          -
-            AttributeName: recipient
+          - AttributeName: recipient
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
