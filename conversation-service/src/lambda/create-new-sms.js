@@ -15,8 +15,10 @@ module.exports.handle = (event, _context, callback) => {
   const { recipient } = pathParameters;
   const { body } = JSON.parse(event.body);
 
+  const decodedRecipient = decodeURI(recipient);
+
   const payload = {
-    recipient,
+    recipient: decodedRecipient,
     body
   };
 
