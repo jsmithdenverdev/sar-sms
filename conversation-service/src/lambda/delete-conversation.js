@@ -12,6 +12,7 @@ const eventWirer = wireEvents(emitter)(true);
 module.exports.handle = (event, _context, callback) => {
   const { pathParameters } = event;
   const { recipient } = pathParameters;
+  const decodedRecipient = decodeURI(recipient);
 
   eventWirer([
     {
@@ -33,7 +34,7 @@ module.exports.handle = (event, _context, callback) => {
   ]);
 
   const payload = {
-    recipient
+    recipient: decodedRecipient
   };
 
   emitter.emit(events.DELETE_CONVERSATION, payload);
