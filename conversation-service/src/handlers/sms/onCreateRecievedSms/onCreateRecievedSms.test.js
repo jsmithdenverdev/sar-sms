@@ -52,7 +52,7 @@ describe("onCreateRecievedSms", () => {
     });
   });
 
-  it("emits ERROR when no phone provided", () => {
+  it("emits ERROR when no recipient provided", () => {
     return onCreateRecievedSms({
       emitter,
       addSmsToConversation,
