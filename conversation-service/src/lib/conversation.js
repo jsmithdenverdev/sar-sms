@@ -47,28 +47,6 @@ const readConversation = recipient =>
     });
   });
 
-const readConversationByPhone = phone =>
-  new Promise((resolve, reject) => {
-    const params = {
-      ...baseParams,
-      KeyConditionExpression: "recipient = :r",
-      ExpressionAttributeValues: {
-        ":r": {
-          S: phone
-        }
-      }
-    };
-
-    client.query(params, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        // Assuming one conversation per recipient
-        resolve(data.Items[0]);
-      }
-    });
-  });
-
 const addSmsToConversation = (sms, recipient) =>
   new Promise((resolve, reject) => {
     if (!recipient) {
@@ -148,7 +126,6 @@ const listConversations = () =>
 module.exports = {
   createConversation,
   readConversation,
-  readConversationByPhone,
   addSmsToConversation,
   deleteConversation,
   listConversations
