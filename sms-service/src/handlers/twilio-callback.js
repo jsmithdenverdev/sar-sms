@@ -14,6 +14,6 @@ module.exports.handle = (event, _context, callback) => {
 
   emitter.emit(events.SMS_RECIEVED, {
     body: Body,
-    phone: From
+    recipient: From
   });
 };
